@@ -1,0 +1,104 @@
+{
+  "name": "Workflow A del 2 - Skriv til Neo4j",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        -96
+      ],
+      "id": "05c7ef73-28f9-4528-b81f-7f9a73c7dac3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/Users/nima/.n8n-files/staging_plants_v2.2.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        -96
+      ],
+      "id": "878455d6-c9cc-46b7-9dbb-6938c675d527",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryData = await this.helpers.getBinaryDataBuffer(0, 'data');\nconst json = JSON.parse(binaryData.toString());\nreturn json.plants.map(plant => ({ json: plant }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -96
+      ],
+      "id": "2823e33e-13d5-4f0b-941f-758e476353fb",
+      "name": "Parse staging JSON"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const plant = $input.item.json;\n\nconst query = `\nMERGE (p:Plant {name_en: $name_en})\nSET p.name_latin = $name_latin,\n    p.name_da = $name_da,\n    p.type = $type,\n    p.source = $source,\n    p.edible = $edible\n\nWITH p\n\nFOREACH (fam IN CASE WHEN $family IS NOT NULL THEN [$family] ELSE [] END |\n  MERGE (f:Family {name: fam})\n  MERGE (p)-[:BELONGS_TO]->(f)\n)\n\nFOREACH (soil IN $prefers_soil |\n  MERGE (s:SoilType {name: soil})\n  MERGE (p)-[:PREFERS_SOIL]->(s)\n)\n\nFOREACH (m IN $prefers_moisture |\n  MERGE (moist:Moisture {name: m})\n  MERGE (p)-[:PREFERS_MOISTURE]->(moist)\n)\n\nFOREACH (n IN $depletes |\n  MERGE (nut:Nutrient {name: n})\n  MERGE (p)-[:DEPLETES]->(nut)\n)\n\nFOREACH (n IN $restores |\n  MERGE (nut:Nutrient {name: n})\n  MERGE (p)-[:RESTORES]->(nut)\n)\n\nFOREACH (season IN $grows_in |\n  MERGE (s:Season {name: season})\n  MERGE (p)-[:GROWS_IN]->(s)\n)\n\nFOREACH (other IN $helps |\n  MERGE (o:Plant {name_en: other})\n  MERGE (p)-[:GROWS_WELL_WITH]->(o)\n)\n\nFOREACH (other IN $helped_by |\n  MERGE (o:Plant {name_en: other})\n  MERGE (o)-[:GROWS_WELL_WITH]->(p)\n)\n\nFOREACH (other IN $avoid |\n  MERGE (o:Plant {name_en: other})\n  MERGE (p)-[:ANTAGONIZES]->(o)\n)\n\nFOREACH (other IN $follows_well_after |\n  MERGE (o:Plant {name_en: other})\n  MERGE (p)-[:FOLLOWS_WELL_AFTER]->(o)\n)\n\nFOREACH (other IN $avoid_after |\n  MERGE (o:Plant {name_en: other})\n  MERGE (p)-[:AVOID_AFTER]->(o)\n)\n`;\n\nconst params = {\n  name_en: plant.name_en || '',\n  name_latin: plant.name_latin || null,\n  name_da: plant.name_da || null,\n  type: plant.type || null,\n  source: plant.source || null,\n  family: plant.family || null,\n  edible: plant.edible !== undefined ? plant.edible : null,\n  prefers_soil: plant.prefers_soil || [],\n  prefers_moisture: plant.prefers_moisture || [],\n  depletes: plant.depletes || [],\n  restores: plant.restores || [],\n  grows_in: plant.grows_in || [],\n  helps: plant.helps || [],\n  helped_by: plant.helped_by || [],\n  avoid: plant.avoid || [],\n  follows_well_after: plant.follows_well_after || [],\n  avoid_after: plant.avoid_after || [],\n};\n\nconst response = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://127.0.0.1:7474/db/neo4j/tx/commit',\n  headers: {\n    'Content-Type': 'application/json',\n    'Authorization': 'Basic ' + Buffer.from('neo4j:hajiyard2026').toString('base64')\n  },\n  body: JSON.stringify({\n    statements: [{\n      statement: query,\n      parameters: params\n    }]\n  })\n});\n\nreturn {\n  json: {\n    name_en: plant.name_en,\n    name_da: plant.name_da,\n    name_latin: plant.name_latin,\n    type: plant.type,\n    source: plant.source,\n    edible: plant.edible,\n    family: plant.family,\n    prefers_soil: plant.prefers_soil || [],\n    prefers_moisture: plant.prefers_moisture || [],\n    depletes: plant.depletes || [],\n    restores: plant.restores || [],\n    grows_in: plant.grows_in || [],\n    helps: plant.helps || [],\n    helped_by: plant.helped_by || [],\n    avoid: plant.avoid || [],\n    follows_well_after: plant.follows_well_after || [],\n    avoid_after: plant.avoid_after || [],\n    status: response.errors?.length === 0 ? 'ok' : 'error',\n    errors: response.errors\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        48,
+        -96
+      ],
+      "id": "b00eecdf-b063-4ff9-8684-b6fc7d3691c6",
+      "name": "Skriv til Neo4j"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Parse staging JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse staging JSON": {
+      "main": [
+        [
+          {
+            "node": "Skriv til Neo4j",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a9fe1fd4-736c-4816-8af9-5b6de28435f7",
+  "meta": {
+    "instanceId": "4e60347cc22a05eaca408d33d6ea3ac8dd87c916fd5313e935135dbdd5665bad"
+  },
+  "id": "80Cm81wdYMQX6Vhg",
+  "tags": []
+}

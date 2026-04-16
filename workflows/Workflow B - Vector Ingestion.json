@@ -1,0 +1,408 @@
+{
+  "name": "Workflow B - Vector Ingestion",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        48
+      ],
+      "id": "c53c1750-c145-4c68-a375-80b7a141827c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://en.wikipedia.org/w/api.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "query"
+            },
+            {
+              "name": "titles",
+              "value": "={{ $json.name_latin }}"
+            },
+            {
+              "name": "prop",
+              "value": "extracts"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "exintro",
+              "value": "false"
+            },
+            {
+              "name": "explaintext",
+              "value": "1"
+            },
+            {
+              "name": "redirects",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "PlotPlanner/1.0 (n8n workflow; contact@plotplanner.dk)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "49ff34ac-6a57-47f0-8d27-b141280837e4",
+      "name": "HTTP Request (Wikipedia)"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:7474/db/neo4j/tx/commit",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "neo4jApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"statements\": [{\n    \"statement\": \"MATCH (p:Plant) WHERE p.name_latin IS NOT NULL RETURN p.name_en, p.name_latin\"\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -272,
+        48
+      ],
+      "id": "ff034fa4-b4f8-465c-ad83-5ed54170dff0",
+      "name": "HTTP Request",
+      "credentials": {
+        "neo4jApi": {
+          "id": "8MjPc7ZohW9mKryp",
+          "name": "Neo4j account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst result = data.results[0];\nconst rows = result.data;\n\nreturn rows.map(row => ({\n  json: {\n    name_en: row.row[0],\n    name_latin: row.row[1]\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        48
+      ],
+      "id": "032caacf-5932-48a1-a062-b56359de4bf3",
+      "name": "Parse Neo4j planter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        176,
+        48
+      ],
+      "id": "e19700af-2f33-4d10-8a00-63a539b2fd21",
+      "name": "Loop planter"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $input.item.json;\nconst pages = item.query?.pages || {};\nconst pageKey = Object.keys(pages)[0];\nconst page = pages[pageKey];\nconst extract = page?.extract || '';\nconst name_en = $('Loop planter').item.json.name_en;\nconst name_latin = $('Loop planter').item.json.name_latin;\n\nconst nameMap = {\n  'larkspur': 'Delphinium',\n  'marigold': 'Tagetes',\n  'peppers': 'Capsicum',\n  'turnips and rutabagas': 'Turnip'\n};\n\nif (!extract || extract.length < 50) {\n  return {\n    json: {\n      name_en,\n      name_latin,\n      chunks: [],\n      needs_fallback: true,\n      fallback_search: nameMap[name_en] || name_en\n    }\n  };\n}\n\nconst chunkSize = 500;\nconst overlap = 50;\nconst chunks = [];\nlet start = 0;\n\nwhile (start < extract.length) {\n  const end = Math.min(start + chunkSize, extract.length);\n  chunks.push({\n    text: extract.slice(start, end),\n    index: chunks.length\n  });\n  start += chunkSize - overlap;\n}\n\nreturn {\n  json: {\n    name_en,\n    name_latin,\n    chunks,\n    needs_fallback: false\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -32
+      ],
+      "id": "04fd05e4-3207-43b2-bce3-3225db1afb04",
+      "name": "Chunk tekst"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nconst { name_en, name_latin, chunks } = item;\n\nif (!chunks || chunks.length === 0) {\n  return { json: { name_en, status: 'no_chunks' } };\n}\n\nfor (const chunk of chunks) {\n  // Hent embedding fra Ollama\n  const embeddingResponse = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'http://127.0.0.1:11434/api/embeddings',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({\n      model: 'nomic-embed-text',\n      prompt: chunk.text\n    })\n  });\n\n  const embedding = embeddingResponse.embedding;\n\n  // Skriv chunk + embedding til Neo4j\n  await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'http://127.0.0.1:7474/db/neo4j/tx/commit',\n    headers: {\n      'Content-Type': 'application/json',\n      'Authorization': 'Basic ' + Buffer.from('neo4j:hajiyard2026').toString('base64')\n    },\n    body: JSON.stringify({\n      statements: [{\n        statement: `\n          MATCH (p:Plant {name_en: $name_en})\n          CREATE (c:Chunk {\n            text: $text,\n            index: $index,\n            embedding: $embedding\n          })\n          CREATE (p)-[:HAS_CHUNK]->(c)\n        `,\n        parameters: {\n          name_en,\n          text: chunk.text,\n          index: chunk.index,\n          embedding: embedding\n        }\n      }]\n    })\n  });\n}\n\nreturn { json: { name_en, status: 'ok', chunks_written: chunks.length } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        48
+      ],
+      "id": "43a4a566-5c5c-4d26-9e19-0c4af9768e3b",
+      "name": "Generer embeddings og skriv til Neo4j"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -224
+      ],
+      "id": "b3a28ec0-a76c-43aa-9b8b-0482c2a1ef5d",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3011202a-3c02-4735-9bf1-3759042a6e38",
+              "leftValue": "={{ $json.needs_fallback }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        848,
+        -32
+      ],
+      "id": "da5a3076-6d29-4121-9adf-852c06c71aec",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "https://en.wikipedia.org/w/api.php",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "action",
+              "value": "query"
+            },
+            {
+              "name": "titles",
+              "value": "={{ $json.fallback_search }}"
+            },
+            {
+              "name": "prop",
+              "value": "extracts"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "exintro",
+              "value": "false"
+            },
+            {
+              "name": "explaintext",
+              "value": "1"
+            },
+            {
+              "name": "redirects",
+              "value": "1"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "PlotPlanner/1.0 (n8n workflow; contact@plotplanner.dk)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1072,
+        -112
+      ],
+      "id": "dc26ed5e-5b85-4441-8317-8914bad3fedd",
+      "name": "HTTP Request (Wikipedia fallback)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\nconst pages = item.query?.pages || {};\nconst pageKey = Object.keys(pages)[0];\nconst page = pages[pageKey];\nconst extract = page?.extract || '';\nconst name_en = $('Chunk tekst').item.json.name_en;\nconst name_latin = $('Chunk tekst').item.json.name_latin;\n\nif (!extract || extract.length < 50) {\n  return {\n    json: {\n      name_en,\n      name_latin,\n      chunks: [],\n      needs_fallback: false\n    }\n  };\n}\n\nconst chunkSize = 500;\nconst overlap = 50;\nconst chunks = [];\nlet start = 0;\n\nwhile (start < extract.length) {\n  const end = Math.min(start + chunkSize, extract.length);\n  chunks.push({\n    text: extract.slice(start, end),\n    index: chunks.length\n  });\n  start += chunkSize - overlap;\n}\n\nreturn {\n  json: {\n    name_en,\n    name_latin,\n    chunks,\n    needs_fallback: false\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        -112
+      ],
+      "id": "48dda309-b100-4cf5-91c3-fc432a39a420",
+      "name": "Chunk tekst fallback"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Parse Neo4j planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Neo4j planter": {
+      "main": [
+        [
+          {
+            "node": "Loop planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop planter": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request (Wikipedia)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (Wikipedia)": {
+      "main": [
+        [
+          {
+            "node": "Chunk tekst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk tekst": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generer embeddings og skriv til Neo4j": {
+      "main": [
+        [
+          {
+            "node": "Loop planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request (Wikipedia fallback)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generer embeddings og skriv til Neo4j",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request (Wikipedia fallback)": {
+      "main": [
+        [
+          {
+            "node": "Loop planter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Chunk tekst fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk tekst fallback": {
+      "main": [
+        [
+          {
+            "node": "Generer embeddings og skriv til Neo4j",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "354008f2-525f-4a81-8899-c525b6684aff",
+  "meta": {
+    "instanceId": "4e60347cc22a05eaca408d33d6ea3ac8dd87c916fd5313e935135dbdd5665bad"
+  },
+  "id": "i2PGB4FjMQJyLBHr",
+  "tags": []
+}

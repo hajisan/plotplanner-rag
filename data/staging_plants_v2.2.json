@@ -1,0 +1,4308 @@
+{
+  "plants": [
+    {
+      "name_en": "apple",
+      "name_latin": "Malus domestica",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "æble-slægten",
+      "name_da": "Æble",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "beans",
+        "peas",
+        "corn"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "apricot",
+      "name_latin": "Prunus armeniaca",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "kirsebær",
+      "name_da": "Abrikos",
+      "prefers_soil": [
+        "loamy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "beets",
+        "carrots",
+        "lettuce",
+        "spinach"
+      ],
+      "avoid_after": [
+        "pears"
+      ],
+      "grows_in": [
+        "spring",
+        "early spring (depending on location)"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "blueberries",
+      "name_latin": "Vaccinium spp.",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Blåbær",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "cabbage",
+        "strawberries"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "grapes",
+      "name_latin": "Vitis spp.",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [
+        "hyssop",
+        "chives"
+      ],
+      "avoid": [
+        "garlic"
+      ],
+      "family": null,
+      "name_da": "Druer",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "corn"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "melon",
+      "name_latin": "Cucumis melo",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [
+        "chamomile",
+        "summersavoury"
+      ],
+      "avoid": [],
+      "family": "Agurk",
+      "name_da": "Melon",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "lettuce"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "passion fruit",
+      "name_latin": "Passiflora edulis",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [
+        "strawberries"
+      ],
+      "avoid": [],
+      "family": "Passiflora",
+      "name_da": "Passionsfrugt",
+      "prefers_soil": [
+        "loamy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomato",
+        "corn",
+        "squash",
+        "beans"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "pears",
+      "name_latin": "Pyrus spp.",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Pærer",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "beets",
+        "peas",
+        "corn"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "strawberries",
+      "name_latin": "Fragaria × ananassa",
+      "type": "Fruit",
+      "source": "alecsharpie",
+      "helps": [
+        "passionfruit"
+      ],
+      "helped_by": [
+        "caraway",
+        "lupin",
+        "sage",
+        "thyme",
+        "borage"
+      ],
+      "avoid": [],
+      "family": "jordbær-slægten",
+      "name_da": "Jordbær",
+      "prefers_soil": [
+        "loamy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "beets"
+      ],
+      "avoid_after": [
+        "lettuce",
+        "spinach"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "anise",
+      "name_latin": "Pimpinella anisum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Pimpinelle",
+      "name_da": "Anis",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "basil",
+      "name_latin": "Ocimum basilicum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Basilikum-slægten",
+      "name_da": "Basilikum",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "avoid_after": [
+        "squash",
+        "beans"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "borage",
+      "name_latin": "Borago officinalis",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "fruittrees"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Hjulkrone",
+      "name_da": "Hjulkrone",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "beets"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "caraway",
+      "name_latin": "Carum carvi",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "strawberries"
+      ],
+      "helped_by": [],
+      "avoid": [
+        "dill"
+      ],
+      "family": "Kommen-slægten",
+      "name_da": "Kommen",
+      "prefers_soil": [
+        "clay",
+        "loamy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "catnip",
+      "name_latin": "Nepeta cataria",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Katteurt",
+      "name_da": "Kattemynte",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "peppers"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "chamomile",
+      "name_latin": "Matricaria recutita",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "kamille",
+      "name_da": "Kamille",
+      "prefers_soil": [
+        "sandy",
+        "loamy"
+      ],
+      "depletes": [],
+      "restores": [
+        "potassium",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "carrots",
+        "beets",
+        "peas",
+        "spinach"
+      ],
+      "avoid_after": [
+        "asparagus",
+        "garlic",
+        "sage"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "chervil",
+      "name_latin": "Anthriscus cerefolium",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "kørvel",
+      "name_da": "Kørvel",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrot",
+        "lettuce",
+        "onion"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "chives",
+      "name_latin": "Allium schoenoprasum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "grapes"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Løg-slægten",
+      "name_da": "Purløg",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "cilantro / coriander",
+      "name_latin": "Coriandrum sativum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "anise"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Coriandrum",
+      "name_da": "Koriander",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "carrots",
+        "lettuce"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "dill",
+      "name_latin": "Anethum graveolens",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "fennel"
+      ],
+      "helped_by": [
+        "fennel"
+      ],
+      "avoid": [],
+      "family": "Anethum",
+      "name_da": "Dild",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrot",
+        "lettuce",
+        "onion",
+        "pea",
+        "potato"
+      ],
+      "avoid_after": [
+        "beet",
+        "chard",
+        "parsnip"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "fennel",
+      "name_latin": "Foeniculum vulgare",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "dill"
+      ],
+      "helped_by": [
+        "dill"
+      ],
+      "avoid": [],
+      "family": "fennikel",
+      "name_da": "Fennikel",
+      "prefers_soil": [
+        "clay",
+        "loamy"
+      ],
+      "depletes": [],
+      "restores": [
+        "copper"
+      ],
+      "follows_well_after": [
+        "carrots",
+        "beets",
+        "peas",
+        "corn"
+      ],
+      "avoid_after": [
+        "lettuce",
+        "spinach",
+        "cabbage",
+        "broccoli",
+        "cauliflower"
+      ],
+      "grows_in": [
+        "spring",
+        "autumn/fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "flax",
+      "name_latin": "Linum usitatissimum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "hør",
+      "name_da": "Hør",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "lettuce",
+        "peas",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "edible": true,
+      "prefers_moisture": [
+        "well-drained"
+      ]
+    },
+    {
+      "name_en": "garlic",
+      "name_latin": "Allium sativum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [
+        "grapes"
+      ],
+      "family": "Løg-slægten",
+      "name_da": "Hvidløg",
+      "prefers_soil": [
+        "sandy",
+        "chalky",
+        "loamy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "tomatoes",
+        "carrots",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "asparagus",
+        "fennel"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "hyssop",
+      "name_latin": "Hyssopus officinalis",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "grapes"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Isop",
+      "name_da": "Isop",
+      "prefers_soil": [
+        "chalky",
+        "loamy"
+      ],
+      "depletes": [],
+      "restores": [
+        "potassium",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "lavender",
+      "name_latin": "Lavandula angustifolia, L. dentata, L. stoechas",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Lavendel",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "beans",
+        "peas",
+        "carrots",
+        "beets"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "lemon grass",
+      "name_latin": "Cymbopogon citratus",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Citrongræs",
+      "name_da": "Citrongræs",
+      "prefers_soil": [
+        "loamy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "peppers",
+        "corn",
+        "beans"
+      ],
+      "avoid_after": [
+        "basil"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "lovage",
+      "name_latin": "Levisticum officinale",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Løvstikke-slægten",
+      "name_da": "Løvstikke",
+      "prefers_soil": [
+        "loamy",
+        "chalky",
+        "clay",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "oregano",
+      "name_latin": "Origanum vulgare",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "merian",
+      "name_da": "Oregano",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "carrots",
+        "lettuce",
+        "beets"
+      ],
+      "avoid_after": [
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "parsley",
+      "name_latin": "Petroselinum crispum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "persille-slægten",
+      "name_da": "Persille",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas",
+        "tomatoes",
+        "lettuce",
+        "spinach"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "peppermint",
+      "name_latin": "Mentha piperita",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "mynte",
+      "name_da": "Pebermynte",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "rosemary",
+      "name_latin": "Rosmarinus officinalis",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Rosmarin-slægten",
+      "name_da": "Rosmarin",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "corn",
+        "garlic"
+      ],
+      "avoid_after": [
+        "beets",
+        "carrots"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "sage",
+      "name_latin": "Salvia officinalis",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "salvie",
+      "name_da": "Salvie",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "peppers",
+        "tomatoes",
+        "beans"
+      ],
+      "avoid_after": [
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "southernwood",
+      "name_latin": "Artemisia abrotanum",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "bynke",
+      "name_da": "Sydenved",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "lettuce",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "solanaceae"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "spearmint",
+      "name_latin": "Mentha spicata",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "mynte",
+      "name_da": "Grøn mynte",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "beets",
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "stinging nettle",
+      "name_latin": "Urtica dioica",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Nælde",
+      "name_da": "Brændenælde",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "beets"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "summer savoury",
+      "name_latin": "Satureja hortensis",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [
+        "melon"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Sar",
+      "name_da": "Sommersar",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "corn"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "tarragon",
+      "name_latin": "Artemisia dracunculus",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "bynke",
+      "name_da": "Estragon",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "winter"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "thyme",
+      "name_latin": "Thymus vulgaris",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "timian",
+      "name_da": "Timian",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peppers",
+        "tomatoes",
+        "beans",
+        "corn",
+        "garlic"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "wormwood",
+      "name_latin": "Artemisia absinthium",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "bynke",
+      "name_da": "Malurt",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers",
+        "beans"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "yarrow",
+      "name_latin": "Achillea millefolium",
+      "type": "Herbs",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "røllike",
+      "name_da": "Røllike",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [
+        "phosphorus",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "alyssum",
+      "name_latin": "Lobularia maritima",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Lobularia",
+      "name_da": "Stenurt",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "spinach",
+        "peas"
+      ],
+      "avoid_after": [
+        "beets"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "baby's breath",
+      "name_latin": "Gypsophila paniculata",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Gipsurt",
+      "name_da": "Gypsofil",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "carrot",
+        "cucumber"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "bee balm",
+      "name_latin": "Monarda spp.",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Bibalm",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [
+        "phosphorus",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "marigold",
+        "carrot",
+        "peas",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "californian poppy",
+      "name_latin": "Eschscholzia californica",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Eschscholzia",
+      "name_da": "Californisk valmue",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomato",
+        "carrot",
+        "lettuce",
+        "pea"
+      ],
+      "avoid_after": [
+        "beans"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "dianthus",
+      "name_latin": "Dianthus caryophyllus",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "nellike",
+      "name_da": "Nellike",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "lettuce",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomato",
+        "potato",
+        "pepper"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "geraniums",
+      "name_latin": "Pelargonium spp.",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Geranium",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "peppers",
+        "tomatoes",
+        "lettuce"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "larkspur",
+      "name_latin": "Delphinium spp.",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Ridderspore",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "corn",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "other delphiniums",
+        "asters"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "lupin",
+      "name_latin": "Lupinus",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Genisteae",
+      "name_da": "Lupin",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "corn",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "marigold",
+      "name_latin": "Tagetes patula, T. erecta, T. minuta",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Tagetes",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "beets",
+        "carrots",
+        "lettuce",
+        "spinach"
+      ],
+      "avoid_after": [
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "nasturtium",
+      "name_latin": "Tropaeolum majus",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Tropæolum",
+      "name_da": "Blomsterkarse",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "pansy",
+      "name_latin": "Viola x wittrockiana",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Stedmoderblomst",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "lettuce",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "petunia",
+      "name_latin": "Petunia x hybrida",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Petunia",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "carrot",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomato",
+        "potato",
+        "pepper"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "phacelia",
+      "name_latin": "Phacelia tanacetifolia",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Honningurt",
+      "name_da": "Phacelia",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "carrots",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "squash",
+        "broccoli",
+        "cabbage"
+      ],
+      "grows_in": [
+        "spring"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "rose",
+      "name_latin": "Rosa spp.",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [
+        "chives",
+        "garlic"
+      ],
+      "avoid": [],
+      "family": null,
+      "name_da": "Rose",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "carrots",
+        "lettuce",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "sunflower",
+      "name_latin": "Helianthus annuus",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "solsikke-slægten",
+      "name_da": "Solsikke",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "swan plant",
+      "name_latin": "Gomphocarpus physocarpus, Asclepias physocarpa, milkweed",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Svaneblomst",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "sweet pea",
+      "name_latin": "Lathyrus odoratus",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "fladbælg",
+      "name_da": "Lugtært",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [
+        "calcium",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "beans",
+        "carrots",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "tansy",
+      "name_latin": "Tanacetum vulgare",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [
+        "fruittrees"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Rejnfan-slægten",
+      "name_da": "Rejnfan",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [
+        "none (tansy",
+        "tanacetum vulgare"
+      ],
+      "follows_well_after": [
+        "carrots",
+        "peas",
+        "beets"
+      ],
+      "avoid_after": [
+        "lettuce",
+        "spinach"
+      ],
+      "grows_in": [
+        "winter"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "zinnia",
+      "name_latin": "Zinnia",
+      "type": "Flowers",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Heliantheae",
+      "name_da": "Zinnia",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "marigold",
+        "beans",
+        "peas",
+        "carrots",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": false
+    },
+    {
+      "name_en": "alfalfa",
+      "name_latin": "Medicago sativa",
+      "type": "Other",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Sneglebælg",
+      "name_da": "Lucerne",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "peas",
+        "carrots",
+        "beets"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "peanut",
+      "name_latin": "Arachis hypogaea",
+      "type": "Other",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Arachis",
+      "name_da": "Jordnød",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "sunflower",
+        "potato"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "walnut tree",
+      "name_latin": "Juglans spp.",
+      "type": "Other",
+      "source": "alecsharpie",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Valnøddetræ",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas",
+        "beans",
+        "corn",
+        "squash"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "alliums",
+      "name_latin": "Allium",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "fruit trees",
+        "capsicum peppers",
+        "carrots"
+      ],
+      "helped_by": [
+        "carrots",
+        "tomatoes"
+      ],
+      "avoid": [
+        "beans peas"
+      ],
+      "family": "Allieae",
+      "name_da": "Løgplanter",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "asparagus",
+      "name_latin": "Asparagus officinalis",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "tomatoes",
+        "parsley"
+      ],
+      "helped_by": [
+        "dill",
+        "coriander",
+        "tomatoes",
+        "parsley",
+        "basil"
+      ],
+      "avoid": [
+        "onion",
+        "garlic"
+      ],
+      "family": "asparges",
+      "name_da": "Asparges",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "beans, bush",
+      "name_latin": "Phaseolus vulgaris",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "cucumber",
+        "strawberries"
+      ],
+      "helped_by": [
+        "celery",
+        "strawberries",
+        "grains"
+      ],
+      "avoid": [
+        "fennel",
+        "dry beans",
+        "alfalfa"
+      ],
+      "family": "Phaseolus",
+      "name_da": "Buskbønner",
+      "prefers_soil": [
+        "clay",
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "peas",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "none"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "beans, pole",
+      "name_latin": "Phaseolus vulgaris",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [],
+      "helped_by": [
+        "corn"
+      ],
+      "avoid": [
+        "beets",
+        "kohlrabi"
+      ],
+      "family": "Phaseolus",
+      "name_da": "Stangbønner",
+      "prefers_soil": [
+        "clay",
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "tomatoes",
+        "peppers"
+      ],
+      "avoid_after": [
+        "beets",
+        "spinach"
+      ],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "beans, fava",
+      "name_latin": "Vicia faba",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [],
+      "helped_by": [
+        "strawberries",
+        "celery"
+      ],
+      "avoid": [],
+      "family": "vikke",
+      "name_da": "Hestebønner",
+      "prefers_soil": [
+        "clay",
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "cucumber",
+        "tomatoes",
+        "peppers",
+        "squash"
+      ],
+      "avoid_after": [
+        "beets",
+        "carrots",
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "beets",
+      "name_latin": "Beta vulgaris",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "broccoli",
+        "bush beans",
+        "cabbage",
+        "lettuce",
+        "kohlrabi",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "bush beans",
+        "kohlrabi",
+        "catnip",
+        "garlic",
+        "lettuce",
+        "mint"
+      ],
+      "avoid": [],
+      "family": "Beta sect. Beta",
+      "name_da": "Rødbeder",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "lettuce",
+        "spinach",
+        "peas",
+        "carrots"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "broccoli",
+      "name_latin": "Brassica oleracea",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "lettuce"
+      ],
+      "helped_by": [
+        "dill",
+        "lettuce",
+        "mustard",
+        "tomato"
+      ],
+      "avoid": [],
+      "family": "kål",
+      "name_da": "Broccoli",
+      "prefers_soil": [
+        "sandy",
+        "loamy",
+        "chalky",
+        "clay"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [
+        "calcium",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "corn",
+        "carrots",
+        "cauliflower",
+        "celery",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained",
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "brussels sprouts",
+      "name_latin": "Brassica oleracea",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [],
+      "helped_by": [
+        "sage",
+        "thyme"
+      ],
+      "avoid": [],
+      "family": "kål",
+      "name_da": "Rosenkål",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [
+        "phosphorus",
+        "and potassium)"
+      ],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "celery",
+        "lettuce"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "cabbage",
+      "name_latin": "Brassica oleracea / Brassica chinensis",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "celery"
+      ],
+      "helped_by": [
+        "beans",
+        "calendula/pot marigold",
+        "chamomile",
+        "larkspur",
+        "dill",
+        "coriander",
+        "hyssop",
+        "beets",
+        "mint",
+        "rosemary",
+        "sage",
+        "thyme",
+        "tomatoes",
+        "lacy phacelia"
+      ],
+      "avoid": [
+        "grapes"
+      ],
+      "family": null,
+      "name_da": "Kål",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "corn",
+        "squash"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers",
+        "lettuce"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "carrots",
+      "name_latin": "Daucus carota",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "tomatoes",
+        "alliums",
+        "beans",
+        "lettuce",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "lettuce",
+        "alliums",
+        "rosemary",
+        "wormwood",
+        "sage",
+        "beans",
+        "flax"
+      ],
+      "avoid": [
+        "dill",
+        "parsnip",
+        "radish"
+      ],
+      "family": "gulerod-slægten",
+      "name_da": "Gulerødder",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "lettuce",
+        "spinach"
+      ],
+      "avoid_after": [
+        "tomatoes"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "cauliflower",
+      "name_latin": "Brassica oleracea",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "celery",
+        "spinach",
+        "peas"
+      ],
+      "helped_by": [
+        "rape",
+        "peas"
+      ],
+      "avoid": [],
+      "family": "kål",
+      "name_da": "Blomkål",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [
+        "calcium"
+      ],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "lettuce",
+        "spinach"
+      ],
+      "avoid_after": [
+        "cabbage family",
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "celery",
+      "name_latin": "Apium graveolens",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "bush beans",
+        "cucumber"
+      ],
+      "helped_by": [
+        "tomatoes",
+        "cauliflower",
+        "cabbage",
+        "bush beans"
+      ],
+      "avoid": [
+        "corn",
+        "aster flowers"
+      ],
+      "family": "selleri",
+      "name_da": "Selleri",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "beets",
+        "peas"
+      ],
+      "avoid_after": [
+        "lettuce",
+        "spinach"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "chard",
+      "name_latin": "Beta vulgaris ssp. cicla",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "passion fruit"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "name_da": "Bladbede",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [],
+      "restores": [
+        "calcium",
+        "magnesium"
+      ],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "corn",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "corn / maize",
+      "name_latin": "Zea mays",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "cucurbits",
+        "tomatoes"
+      ],
+      "helped_by": [
+        "dill",
+        "peas",
+        "cucurbits",
+        "white geranium",
+        "parsley"
+      ],
+      "avoid": [
+        "tomato",
+        "celery"
+      ],
+      "family": "majs-slægten",
+      "name_da": "Majs",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "squash"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "cucumber",
+      "name_latin": "Cucumis sativus",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "kohlrabi",
+        "lettuce"
+      ],
+      "helped_by": [
+        "kohlrabi",
+        "peas",
+        "beans",
+        "chamomile",
+        "beets",
+        "carrots",
+        "dill",
+        "garlic",
+        "celery"
+      ],
+      "avoid": [
+        "potato",
+        "aromatic herbs"
+      ],
+      "family": "Agurk",
+      "name_da": "Agurk",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomato",
+        "peppers",
+        "eggplant"
+      ],
+      "avoid_after": [
+        "beets",
+        "carrots",
+        "lettuce",
+        "spinach"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "cucurbits",
+      "name_latin": "Cucurbitaceae",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "corn"
+      ],
+      "helped_by": [
+        "corn"
+      ],
+      "avoid": [],
+      "family": "Græskar-ordenen",
+      "name_da": "Græskarfamilien",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "eggplant or aubergine",
+      "name_latin": "Solanum melongena",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "peppers",
+        "tomatoes",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "catnip",
+        "dill",
+        "green beans",
+        "tarragon",
+        "thyme"
+      ],
+      "avoid": [],
+      "family": "natskygge",
+      "name_da": "Aubergine",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peppers",
+        "beets"
+      ],
+      "avoid_after": [
+        "beans"
+      ],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "kohlrabi",
+      "name_latin": "Brassica oleracea v. gongylodes",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "onion",
+        "beets",
+        "aromatic plants"
+      ],
+      "helped_by": [
+        "beets"
+      ],
+      "avoid": [],
+      "family": null,
+      "name_da": "Kålrabi",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "clay",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "calcium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "corn",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "leek",
+      "name_latin": "Allium ampeloprasum v. porrum",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "carrots",
+        "celery",
+        "tomato",
+        "passion fruit"
+      ],
+      "helped_by": [],
+      "avoid": [
+        "swiss chard"
+      ],
+      "family": null,
+      "name_da": "Porre",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrot",
+        "potato",
+        "beetroot",
+        "pea",
+        "cucumber"
+      ],
+      "avoid_after": [
+        "onion",
+        "garlic"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "legumes",
+      "name_latin": "Phaseolus and Vicia",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beets",
+        "lettuce",
+        "okra",
+        "potato",
+        "spinach",
+        "dill",
+        "cabbage",
+        "carrots",
+        "chards",
+        "eggplant",
+        "peas",
+        "tomatoes",
+        "corn",
+        "grapes"
+      ],
+      "helped_by": [
+        "summer savory",
+        "beets",
+        "borage",
+        "cabbage",
+        "carrots",
+        "cauliflower",
+        "corn",
+        "larkspur",
+        "lovage",
+        "radish",
+        "potato",
+        "peppermint",
+        "rosemary",
+        "lettuce",
+        "onion",
+        "squash",
+        "lacy phacelia"
+      ],
+      "avoid": [
+        "alliums"
+      ],
+      "family": null,
+      "name_da": "Bælgplanter",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "lettuce",
+      "name_latin": "Lactuca sativa",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beets",
+        "beans",
+        "okra",
+        "radish",
+        "broccoli",
+        "carrots",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "radish",
+        "beets",
+        "dill",
+        "kohlrabi",
+        "beans",
+        "carrots",
+        "strawberries",
+        "broccoli thyme",
+        "alyssum",
+        "cilantro"
+      ],
+      "avoid": [
+        "celery",
+        "cabbage",
+        "cress",
+        "parsley"
+      ],
+      "family": "Salat",
+      "name_da": "Salat",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "peppers",
+        "spinach",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "mustard",
+      "name_latin": "Sinapis alba",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "broccoli",
+        "cabbage",
+        "cauliflower",
+        "fruit trees",
+        "grapes",
+        "radish",
+        "brussels sprouts"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "sennep-slægten",
+      "name_da": "Sennep",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beets",
+        "carrots",
+        "peas"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "broccoli"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "nightshades",
+      "name_latin": "Solanaceae",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [],
+      "helped_by": [
+        "carrots",
+        "alliums",
+        "oregano"
+      ],
+      "avoid": [
+        "beans",
+        "black walnuts",
+        "corn",
+        "fennel",
+        "dill"
+      ],
+      "family": "natskyggeordenen",
+      "name_da": "Natteskygger",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "okra",
+      "name_latin": "Abelmoschus esculentus",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "sweet potato",
+        "tomatoes",
+        "peppers"
+      ],
+      "helped_by": [
+        "beans",
+        "lettuce",
+        "squash",
+        "sweet potato",
+        "peppers"
+      ],
+      "avoid": [],
+      "family": "Abelmoschus",
+      "name_da": "Okra",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "peas",
+        "lettuce",
+        "corn"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "onion",
+      "name_latin": "Allium cepa",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beets",
+        "beans",
+        "cabbage",
+        "broccoli",
+        "carrots",
+        "lettuce",
+        "peppers",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "carrots",
+        "beets",
+        "dill",
+        "lettuce",
+        "strawberries",
+        "tomatoes",
+        "summer savory",
+        "chamomile",
+        "pansy"
+      ],
+      "avoid": [
+        "lentils",
+        "peas"
+      ],
+      "family": "Løg-slægten",
+      "name_da": "Løg",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "corn",
+        "lettuce",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "none  however"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "parsnip",
+      "name_latin": "Pastinaca sativa",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "fruit trees"
+      ],
+      "helped_by": [],
+      "avoid": [],
+      "family": "Pastinak-slægten",
+      "name_da": "Pastinak",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrot",
+        "beetroot",
+        "onion",
+        "peas"
+      ],
+      "avoid_after": [
+        "potato",
+        "tomato",
+        "cucumber",
+        "lettuce"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "peas",
+      "name_latin": "Pisum sativum",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "cauliflower",
+        "garlic"
+      ],
+      "helped_by": [
+        "cauliflower",
+        "garlic"
+      ],
+      "avoid": [],
+      "family": "ært",
+      "name_da": "Ærter",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "beets"
+      ],
+      "avoid_after": [
+        "beans",
+        "cauliflower"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "peppers",
+      "name_latin": "Solanaceae, Capsicum",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "okra"
+      ],
+      "helped_by": [
+        "beans",
+        "tomatoes",
+        "marjoram",
+        "okra",
+        "geraniums",
+        "basil"
+      ],
+      "avoid": [
+        "beans",
+        "kale",
+        "brussels sprouts"
+      ],
+      "family": null,
+      "name_da": "Peberfrugter",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "tomatoes",
+        "cabbage",
+        "beets",
+        "garlic"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "potato",
+      "name_latin": "Solanum tuberosum",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "beans",
+        "corn",
+        "peas",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "beans",
+        "peas",
+        "onion",
+        "garlic",
+        "thyme"
+      ],
+      "avoid": [
+        "carrot",
+        "cucumber",
+        "pumpkin",
+        "raspberries",
+        "squash",
+        "sunflower",
+        "tomato"
+      ],
+      "family": "natskygge",
+      "name_da": "Kartoffel",
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "phosphorus",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "peas",
+        "beets",
+        "spinach",
+        "lettuce"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "pepper",
+        "eggplant",
+        "potato"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "pumpkin",
+      "name_latin": "Cucurbita pepo",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "corn",
+        "beans"
+      ],
+      "helped_by": [
+        "catnip",
+        "oregano",
+        "tansy"
+      ],
+      "avoid": [],
+      "family": "græskar",
+      "name_da": "Græskar",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "calcium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "radish",
+      "name_latin": "Raphanus sativus",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "squash eggplant",
+        "cucumber",
+        "lettuce",
+        "peas",
+        "beans"
+      ],
+      "helped_by": [
+        "chervil",
+        "lettuce"
+      ],
+      "avoid": [
+        "grapes"
+      ],
+      "family": "Kiddike-slægten",
+      "name_da": "Radise",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "calcium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "lettuce",
+        "spinach",
+        "tomatoes"
+      ],
+      "avoid_after": [
+        "broccoli"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "soybean",
+      "name_latin": "Glycine max",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [],
+      "helped_by": [
+        "corn",
+        "sunflower"
+      ],
+      "avoid": [],
+      "family": "Glycine",
+      "name_da": "Sojabønne",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "spinach",
+      "name_latin": "Spinacia oleracea",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "cauliflower",
+        "passion fruit"
+      ],
+      "helped_by": [
+        "strawberries",
+        "peas",
+        "beans",
+        "cauliflower"
+      ],
+      "avoid": [],
+      "family": "Spinacia",
+      "name_da": "Spinat",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "carrots",
+        "tomatoes",
+        "peppers"
+      ],
+      "avoid_after": [
+        "cabbage",
+        "lettuce"
+      ],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "squash",
+      "name_latin": "Cucurbita spp.",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "corn",
+        "beans",
+        "okra"
+      ],
+      "helped_by": [
+        "beans",
+        "borage",
+        "catnip",
+        "tansy"
+      ],
+      "avoid": [],
+      "family": null,
+      "name_da": "Squash",
+      "prefers_soil": [
+        "sandy",
+        "loamy"
+      ],
+      "depletes": [
+        "calcium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "beans",
+        "peppers",
+        "tomatoes"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "sweet potato",
+      "name_latin": "Ipomoea batatas",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "okra"
+      ],
+      "helped_by": [
+        "okra"
+      ],
+      "avoid": [],
+      "family": "Ipomoea",
+      "name_da": "Sødkartoffel",
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "potassium",
+        "magnesium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "corn",
+        "soybean",
+        "peas",
+        "beans"
+      ],
+      "avoid_after": [
+        "tomatoes",
+        "peppers"
+      ],
+      "grows_in": [
+        "spring",
+        "summer",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "tomatoes",
+      "name_latin": "Solanum lycopersicum",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "broccoli",
+        "cabbage",
+        "celery",
+        "peppers",
+        "asparagus"
+      ],
+      "helped_by": [
+        "asparagus",
+        "basil",
+        "beans",
+        "bee balm",
+        "oregano",
+        "parsley",
+        "marigold",
+        "alliums",
+        "garlic",
+        "celery",
+        "geraniums",
+        "nasturtium",
+        "borage",
+        "coriander",
+        "chives",
+        "corn",
+        "dill",
+        "mustard",
+        "carrots",
+        "eggplant",
+        "okra",
+        "sage",
+        "thyme"
+      ],
+      "avoid": [
+        "black walnut",
+        "alfalfa",
+        "corn",
+        "fennel",
+        "chili peppers",
+        "peas",
+        "dill",
+        "beetroot",
+        "rosemary"
+      ],
+      "family": null,
+      "name_da": "Tomater",
+      "prefers_soil": [
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "phosphorus"
+      ],
+      "restores": [
+        "calcium"
+      ],
+      "follows_well_after": [
+        "beans",
+        "peas",
+        "lettuce",
+        "carrots"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "summer"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "turnips and rutabagas",
+      "name_latin": "Brassica rapa and Brassica napobrassica",
+      "type": "Vegetable",
+      "source": "genevieve",
+      "helps": [
+        "peas",
+        "broccoli"
+      ],
+      "helped_by": [
+        "peas"
+      ],
+      "avoid": [
+        "hedge mustard",
+        "knotweed"
+      ],
+      "family": null,
+      "name_da": "Turnips og kålroe",
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "depletes": [
+        "nitrogen",
+        "potassium"
+      ],
+      "restores": [],
+      "follows_well_after": [
+        "carrots",
+        "spinach",
+        "beets",
+        "peas"
+      ],
+      "avoid_after": [],
+      "grows_in": [
+        "spring",
+        "fall"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "edible": true
+    },
+    {
+      "name_en": "pak choi",
+      "name_latin": "Brassica chinensis",
+      "name_da": "Pak choi",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": true
+    },
+    {
+      "name_en": "marigold, african",
+      "name_latin": "Tagetes erecta",
+      "name_da": "Afrikansk tagetes",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": true
+    },
+    {
+      "name_en": "marigold, southeren",
+      "name_latin": "Tagetes minuta",
+      "name_da": "Sydamerikansk tagetes",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "clay",
+        "loamy"
+      ],
+      "prefers_moisture": [
+        "well-drained",
+        "moist but well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": false
+    },
+    {
+      "name_en": "fiddleneck",
+      "name_latin": "Phacelia tanacetifolia",
+      "name_da": "Phacelia",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "chalky",
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": false
+    },
+    {
+      "name_en": "mint",
+      "name_latin": "Mentha spicata",
+      "name_da": "Mynte",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": true
+    },
+    {
+      "name_en": "turnips",
+      "name_latin": "Brassica rapa ",
+      "name_da": "Turnips",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "chalky",
+        "clay",
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": true
+    },
+    {
+      "name_en": "rutabagas",
+      "name_latin": "Brassica napobrassica",
+      "name_da": "Kålroe",
+      "type": "Vegetable",
+      "source": "manual",
+      "helps": [],
+      "helped_by": [],
+      "avoid": [],
+      "family": null,
+      "prefers_soil": [
+        "loamy",
+        "sandy"
+      ],
+      "prefers_moisture": [
+        "moist but well-drained",
+        "well-drained"
+      ],
+      "depletes": [],
+      "restores": [],
+      "follows_well_after": [],
+      "avoid_after": [],
+      "grows_in": [],
+      "edible": true
+    }
+  ],
+  "count": 104,
+  "generated_at": "2026-04-07T17:11:00.743Z"
+}

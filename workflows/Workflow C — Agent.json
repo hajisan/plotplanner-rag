@@ -1,0 +1,188 @@
+{
+  "name": "Workflow C — Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -464,
+        -128
+      ],
+      "id": "7704aff5-dba5-4a64-b754-a22e0e676b43",
+      "name": "When chat message received",
+      "webhookId": "30b85f25-b0ff-49ca-900e-acc1db7c7094"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du er en erfaren markplanlægger med speciale i \nregenerativt landbrug og småskala-dyrkning.\n\nDu hjælper landmænd og andelsgårde med at planlægge\nhvad de skal plante, hvornår og ved siden af hvad.\n\nDu har adgang til to værktøjer:\n- vector_search: brug til spørgsmål om dyrkningsforhold,\n  beskrivelser og semantiske sammenligninger\n- graph_query: brug til specifikke relationer mellem \n  planter, sædskifte og næringsstoffer\n\nRegler:\n- Svar altid på dansk\n- Hvis du er i tvivl, sig det eksplicit\n- Henvis aldrig til planter der ikke findes i databasen\n- Giv altid en kort begrundelse for dine anbefalinger\n- Hvis brugeren nævner en jordbundstype eller sæson,\n  filtrer altid dine svar på det"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -64,
+        -128
+      ],
+      "id": "08e69df0-2a14-4ef9-965a-acc57f2c82e8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to search for plants based on semantic similarity. Input should be a search query in English describing what you are looking for, e.g. \"plants that grow well in sandy soil\" or \"nitrogen fixing plants\". Returns relevant text passages from Wikipedia articles about plants.",
+        "jsCode": "// query variablen er automatisk tilgængelig fra agenten\nconst embeddingResponse = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://127.0.0.1:11434/api/embeddings',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({\n    model: 'nomic-embed-text',\n    prompt: query\n  })\n});\n\nconst embedding = embeddingResponse.embedding;\n\nconst neo4jResponse = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://127.0.0.1:7474/db/neo4j/tx/commit',\n  headers: {\n    'Content-Type': 'application/json',\n    'Authorization': 'Basic ' + Buffer.from('neo4j:hajiyard2026').toString('base64')\n  },\n  body: JSON.stringify({\n    statements: [{\n      statement: `\n        MATCH (p:Plant)-[:HAS_CHUNK]->(c:Chunk)\n        WITH p, c,\n          reduce(dot = 0.0, i IN range(0, size(c.embedding)-1) |\n            dot + c.embedding[i] * $embedding[i]) /\n          (sqrt(reduce(a = 0.0, i IN range(0, size(c.embedding)-1) |\n            a + c.embedding[i]^2)) *\n           sqrt(reduce(b = 0.0, i IN range(0, size($embedding)-1) |\n            b + $embedding[i]^2))) AS similarity\n        WHERE similarity > 0.7\n        RETURN p.name_en, p.name_da, c.text, similarity\n        ORDER BY similarity DESC\n        LIMIT 5\n      `,\n      parameters: { embedding }\n    }]\n  })\n});\n\nconst results = neo4jResponse.results[0]?.data || [];\nif (results.length === 0) return 'No relevant plants found.';\n\nreturn results.map(r => \n  `Plant: ${r.row[0]} (${r.row[1]})\\n${r.row[2]}`\n).join('\\n\\n---\\n\\n');"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        96
+      ],
+      "id": "1deb7eac-0235-4986-ad3f-6d20b65d426f",
+      "name": "Neo4j Vector Search"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to query specific plant relationships from the database. IMPORTANT: Always use the English plant name. Translate Danish plant names to English before calling this tool. Examples: tomat → tomatoes, løg → onion, gulerod → carrots, basilikum → basil, persille → parsley. Input should be a single plant name in English.",
+        "jsCode": "const neo4jResponse = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://127.0.0.1:7474/db/neo4j/tx/commit',\n  headers: {\n    'Content-Type': 'application/json',\n    'Authorization': 'Basic ' + Buffer.from('neo4j:hajiyard2026').toString('base64')\n  },\n  body: JSON.stringify({\n    statements: [{\n      statement: `\n        MATCH (p:Plant)\n        WHERE toLower(p.name_en) CONTAINS toLower($plant_name)\n        OPTIONAL MATCH (p)-[:GROWS_WELL_WITH]->(good:Plant)\n        OPTIONAL MATCH (p)-[:ANTAGONIZES]->(bad:Plant)\n        OPTIONAL MATCH (p)-[:FOLLOWS_WELL_AFTER]->(after:Plant)\n        OPTIONAL MATCH (p)-[:AVOID_AFTER]->(avoid:Plant)\n        OPTIONAL MATCH (p)-[:PREFERS_SOIL]->(soil:SoilType)\n        OPTIONAL MATCH (p)-[:DEPLETES]->(dep:Nutrient)\n        OPTIONAL MATCH (p)-[:RESTORES]->(res:Nutrient)\n        OPTIONAL MATCH (p)-[:GROWS_IN]->(season:Season)\n        OPTIONAL MATCH (p)-[:BELONGS_TO]->(family:Family)\n        RETURN p.name_en, p.name_da, p.name_latin,\n          collect(DISTINCT good.name_en) as grows_well_with,\n          collect(DISTINCT bad.name_en) as antagonizes,\n          collect(DISTINCT after.name_en) as follows_well_after,\n          collect(DISTINCT avoid.name_en) as avoid_after,\n          collect(DISTINCT soil.name) as prefers_soil,\n          collect(DISTINCT dep.name) as depletes,\n          collect(DISTINCT res.name) as restores,\n          collect(DISTINCT season.name) as grows_in,\n          collect(DISTINCT family.name) as family\n        LIMIT 1\n      `,\n      parameters: { plant_name: query }\n    }]\n  })\n});\n\nconst results = neo4jResponse.results[0]?.data || [];\nif (results.length === 0) return `No plant found matching \"${query}\".`;\n\nconst r = results[0].row;\nreturn `Plant: ${r[0]} (${r[1]}, ${r[2]})\nGrows well with: ${r[3].join(', ') || 'none'}\nAntagonizes: ${r[4].join(', ') || 'none'}\nFollows well after: ${r[5].join(', ') || 'none'}\nAvoid after: ${r[6].join(', ') || 'none'}\nPrefers soil: ${r[7].join(', ') || 'unknown'}\nDepletes: ${r[8].join(', ') || 'none'}\nRestores: ${r[9].join(', ') || 'none'}\nGrows in: ${r[10].join(', ') || 'unknown'}\nFamily: ${r[11].join(', ') || 'unknown'}`;"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        96
+      ],
+      "id": "6b181c8f-94c9-4a25-8472-57b74e93926d",
+      "name": "Neo4j Graph Query"
+    },
+    {
+      "parameters": {
+        "model": "llama3.1:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        96
+      ],
+      "id": "30aa425b-ad19-4a2e-8860-a05f83e3f07a",
+      "name": "Ollama Chat Model  - Llama3.1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "MG9StKFUa1zVnIbA",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to find plants for a specific season, soil type, or moisture preference. IMPORTANT: Always use English terms. Valid seasons: spring, summer, fall, winter. Valid soil types: sandy, loamy, clay, chalky, peaty, silty. Valid moisture: well-drained, moist, wet. Input example: \"spring loamy\" or \"clay moist\" or \"well-drained summer\". Do NOT pass JSON objects.",
+        "jsCode": "let queryString = query;\nif (typeof query === 'object' && query !== null) {\n  queryString = Object.values(query).filter(v => typeof v === 'string').join(' ');\n}\n\nconst daToEn = {\n  'forår': 'spring', 'foråret': 'spring',\n  'sommer': 'summer', 'sommeren': 'summer',\n  'efterår': 'fall', 'efteråret': 'fall',\n  'vinter': 'winter', 'vinteren': 'winter',\n  'sandjord': 'sandy', 'sandede': 'sandy', 'sand': 'sandy',\n  'lerjord': 'clay', 'lerede': 'clay', 'ler': 'clay',\n  'siltet': 'silty', 'siltjord': 'silty',\n  'kalkholdig': 'chalky', 'kalk': 'chalky',\n  'tørvejord': 'peaty', 'tørv': 'peaty',\n  'muld': 'loamy',\n  'veldrænet': 'well-drained', 'drænet': 'well-drained',\n  'fugtig': 'moist', 'fugtigt': 'moist',\n  'våd': 'wet', 'vådt': 'wet'\n};\n\nconst translatedTerms = queryString.toLowerCase().split(/[\\s,]+/).map(t => daToEn[t] || t);\nconst terms = translatedTerms;\n\nconst seasons = ['spring', 'summer', 'fall', 'winter'];\nconst soilTypes = ['sandy', 'loamy', 'clay', 'chalky', 'peaty', 'silty'];\nconst moistureTypes = ['well-drained', 'moist but well-drained', 'moist', 'wet', 'poorly drained'];\n\nconst matchedSeasons = terms.filter(t => seasons.includes(t));\nconst matchedSoils = terms.filter(t => soilTypes.includes(t));\nconst matchedMoisture = moistureTypes.filter(m =>\n  terms.some(t => m.includes(t) || t.includes(m))\n);\n\n// Build dynamic Cypher based on what was matched\nlet matchClauses = ['MATCH (p:Plant)'];\nlet whereClauses = [];\nlet parameters = {};\n\nif (matchedSeasons.length > 0) {\n  matchClauses.push('MATCH (p)-[:GROWS_IN]->(s:Season)');\n  whereClauses.push('s.name IN $seasons');\n  parameters.seasons = matchedSeasons;\n}\n\nif (matchedSoils.length > 0) {\n  matchClauses.push('MATCH (p)-[:PREFERS_SOIL]->(soil:SoilType)');\n  whereClauses.push('soil.name IN $soils');\n  parameters.soils = matchedSoils;\n}\n\nif (matchedMoisture.length > 0) {\n  matchClauses.push('MATCH (p)-[:PREFERS_MOISTURE]->(moist:Moisture)');\n  whereClauses.push('moist.name IN $moisture');\n  parameters.moisture = matchedMoisture;\n}\n\nif (Object.keys(parameters).length === 0) {\n  return `Could not identify any season, soil type or moisture in \"${query}\". Use terms like: spring, summer, fall, winter, sandy, loamy, clay, chalky, well-drained, moist.`;\n}\n\nconst whereStr = whereClauses.length > 0 ? 'WHERE ' + whereClauses.join(' AND ') : '';\nconst statement = `\n  ${matchClauses.join('\\n  ')}\n  ${whereStr}\n  RETURN DISTINCT p.name_en, p.name_da\n  ORDER BY p.name_en LIMIT 20\n`;\n\nconst neo4jResponse = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'http://127.0.0.1:7474/db/neo4j/tx/commit',\n  headers: {\n    'Content-Type': 'application/json',\n    'Authorization': 'Basic ' + Buffer.from('neo4j:hajiyard2026').toString('base64')\n  },\n  body: JSON.stringify({ statements: [{ statement, parameters }] })\n});\n\nconst results = neo4jResponse.results[0]?.data || [];\nif (results.length === 0) return `No plants found for \"${query}\".`;\n\nreturn results.map(r => `${r.row[0]} (${r.row[1] || 'no Danish name'})`).join('\\n');"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        96
+      ],
+      "id": "d21017c2-8c2c-4303-b81f-2405170254b0",
+      "name": "Neo4j Season Soil Filter"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        96
+      ],
+      "id": "6da6295b-766e-4cc0-9e9c-34c69a4d6e75",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neo4j Vector Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neo4j Graph Query": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model  - Llama3.1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neo4j Season Soil Filter": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7ed839d3-4c11-407b-a7f2-ec3896410778",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e60347cc22a05eaca408d33d6ea3ac8dd87c916fd5313e935135dbdd5665bad"
+  },
+  "id": "4LErFL2C0o5L3fTr",
+  "tags": []
+}

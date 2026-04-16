@@ -1,0 +1,617 @@
+{
+  "name": "Workflow A - Graf ingestion del 1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -224
+      ],
+      "id": "42027fdf-9015-4317-958e-b4772e1155b6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/alecsharpie/companion_planting_dataset/master/companion_plants.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        -352
+      ],
+      "id": "2cb8c242-75a7-456c-b024-67148d8f1c5f",
+      "name": "Hent alecsharpie JSON"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/GenevieveMilliken/companion_plants/master/companion_plants_veg.csv",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        -160
+      ],
+      "id": "062a7966-b8e5-4cbe-bfc1-95999c327188",
+      "name": "Hent GenevieveMilliken CSV"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -16,
+        -224
+      ],
+      "id": "7f8272e1-9587-430e-a27b-fa9ea5979c1b",
+      "name": "Merge datasæt"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nlet alecsharpieData = [];\nlet genevieveRaw = '';\n\nfor (const item of items) {\n  const data = item.json.data;\n  \n  if (typeof data === 'string' && data.includes('Common name')) {\n    genevieveRaw = data;\n  } else if (typeof data === 'string' && data.includes('common_name')) {\n    alecsharpieData = JSON.parse(data);\n  }\n}\n\n// Normaliser alecsharpie\nconst fromAlecsharpie = alecsharpieData.map(p => ({\n  json: {\n    name_en: p.common_name.toLowerCase().trim(),\n    name_latin: p.scientific_name || null,\n    type: p.type || null,\n    source: 'alecsharpie',\n    helps: p.helps || [],\n    helped_by: p.helped_by || [],\n    avoid: p.avoid || []\n  }\n}));\n\nfunction parseCSVLine(line) {\n  const result = [];\n  let current = '';\n  let inQuotes = false;\n  for (let i = 0; i < line.length; i++) {\n    const char = line[i];\n    if (char === '\"') {\n      inQuotes = !inQuotes;\n    } else if (char === ',' && !inQuotes) {\n      result.push(current.trim());\n      current = '';\n    } else {\n      current += char;\n    }\n  }\n  result.push(current.trim());\n  return result;\n}\n\nconst lines = genevieveRaw.trim().split('\\n');\nconst headers = parseCSVLine(lines[0]);\nconst fromGenevieve = lines.slice(1).map(line => {\n  const vals = parseCSVLine(line);\n  const p = {};\n  headers.forEach((h, i) => p[h.trim()] = (vals[i] || '').trim());\n  return {\n    json: {\n      name_en: (p['Common name'] || '').toLowerCase().trim(),\n      name_latin: (p['Scientific name'] || '').trim() || null,\n      type: 'Vegetable',\n      source: 'genevieve',\n      helps: p['Helps'] ? p['Helps'].split(/[;,]/).map(s => s.trim().toLowerCase()).filter(Boolean) : [],\n      helped_by: p['Helped by'] ? p['Helped by'].split(/[;,]/).map(s => s.trim().toLowerCase()).filter(Boolean) : [],\n      avoid: p['Avoid'] ? p['Avoid'].split(/[;,]/).map(s => s.trim().toLowerCase()).filter(Boolean) : []\n    }\n  };\n}).filter(item => item.json.name_en);\n\n// Merge og dedupliker på name_en\nconst merged = {};\n[...fromAlecsharpie, ...fromGenevieve].forEach(item => {\n  const key = item.json.name_en;\n  if (key && !merged[key]) {\n    merged[key] = item;\n  }\n});\n\nreturn Object.values(merged);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -224
+      ],
+      "id": "55ac33da-733a-4e67-a65c-4fc3fe15a7dc",
+      "name": "Parse og merge planter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -224
+      ],
+      "id": "807db16a-09fe-4189-b7f7-1580100909d0",
+      "name": "Loop planter"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const nameLatin = ($input.item.json.name_latin || '').replace(/\"/g, '').trim();\n\nreturn {\n  json: {\n    ...$input.item.json,\n    sparql_query: `SELECT ?item ?familyLabel ?nameDa WHERE {\n  ?item wdt:P225 \"${nameLatin}\".\n  OPTIONAL { ?item wdt:P171 ?family. }\n  OPTIONAL {\n    ?item p:P225 ?statement.\n    ?statement pq:P1705 ?nameDa.\n    FILTER(LANG(?nameDa) = \"da\")\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"da,en\". }\n} LIMIT 1`\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -224
+      ],
+      "id": "8a7d460c-52b0-41bc-b75e-532fdcb8ec61",
+      "name": "Byg SPARQL query"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://query.wikidata.org/sparql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "PlotPlanner/1.0 (n8n workflow; contact@plotplanner.dk)"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.sparql_query }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 2000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        880,
+        -224
+      ],
+      "id": "ebc295c4-51f8-4a7d-817c-251bcb8f8b03",
+      "name": "Wikidata SPARQL"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const wikidataResponse = $input.item.json;\nconst originalItem = $('Byg SPARQL query').item.json;\nconst dataStr = wikidataResponse.data || '';\n\nlet familyLabel = null;\n\ntry {\n  const parsed = JSON.parse(dataStr);\n  const bindings = parsed?.results?.bindings || [];\n  if (bindings.length > 0) {\n    familyLabel = bindings[0]?.familyLabel?.value || null;\n  }\n} catch(e) {}\n\nreturn {\n  json: {\n    ...originalItem,\n    family: familyLabel,\n    sparql_query: undefined\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        -224
+      ],
+      "id": "b428924e-f0c5-4178-a870-7848a4c751f0",
+      "name": "Parse Wikidata respons"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral\",\n  \"prompt\": \"What is the Danish common name for '{{ $json.name_en }}' ({{ $json.name_latin }})? Reply with ONLY the Danish name as a single word or short phrase. No explanation, no Latin name, no extra text. If unknown, reply with exactly: null\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1552,
+        -224
+      ],
+      "id": "40048210-adf3-44ca-a067-433341081f91",
+      "name": "Ollama - name_da"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ollamaResponse = $input.item.json;\nconst originalItem = $('Byg SPARQL query').item.json;\nconst wikidataItem = $('Parse Wikidata respons').item.json;\nconst raw = (ollamaResponse.response || '').trim();\n\nconst firstLine = raw.split('\\n')[0].trim();\nconst cleaned = firstLine\n  .replace(/\\(.*?\\)/g, '')\n  .replace(/^(note|tip|obs|remark|caveat).*/gi, '')\n  .trim();\n\nconst name_da = cleaned.length > 0 && cleaned.toLowerCase() !== 'null'\n  ? cleaned\n  : null;\n\nreturn {\n  json: {\n    ...originalItem,\n    family: wikidataItem.family,\n    name_da: name_da,\n    sparql_query: undefined\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1776,
+        -224
+      ],
+      "id": "ff8ed5ce-cfa2-4d4d-b58c-c9a6f1c2a7ad",
+      "name": "Parse Ollama name_da"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral\",\n  \"prompt\": \"What soil type does '{{ $json.name_en }}' ({{ $json.name_latin }}) prefer? Choose one or more from: sandy, loamy, clay, chalky, peaty, silty. Reply with ONLY a comma-separated list of soil types, nothing else. Example: loamy, sandy\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2000,
+        -224
+      ],
+      "id": "035e078c-cf4d-4562-a9f4-a6a20b506660",
+      "name": "Ollama - soil"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ollamaResponse = $input.item.json;\nconst originalItem = $('Byg SPARQL query').item.json;\nconst wikidataItem = $('Parse Wikidata respons').item.json;\nconst nameDaItem = $('Parse Ollama name_da').item.json;\nconst raw = (ollamaResponse.response || '').trim();\n\nconst soilTypes = raw\n  .split(',')\n  .map(s => s.trim().toLowerCase())\n  .filter(Boolean);\n\nreturn {\n  json: {\n    ...originalItem,\n    family: wikidataItem.family,\n    name_da: nameDaItem.name_da,\n    prefers_soil: soilTypes,\n    sparql_query: undefined\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        -224
+      ],
+      "id": "b3b39648-eebe-4aeb-95e3-436bcd7a7dde",
+      "name": "Parse Ollama soil"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral\",\n  \"prompt\": \"For the plant '{{ $json.name_en }}' ({{ $json.name_latin }}), answer two questions:\\n1. Which soil nutrients does it DEPLETE? Choose from: nitrogen, phosphorus, potassium, calcium, magnesium\\n2. Which soil nutrients does it RESTORE? Choose from: nitrogen, phosphorus, potassium, calcium, magnesium\\n\\nReply in this exact format:\\nDEPLETES: nutrient1, nutrient2\\nRESTORES: nutrient1, nutrient2\\n\\nIf none, write DEPLETES: none or RESTORES: none\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2448,
+        -224
+      ],
+      "id": "0ec7eea8-85b3-42d0-81fb-28bb5dcf7375",
+      "name": "Ollama - nutrients"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ollamaResponse = $input.item.json;\nconst originalItem = $('Byg SPARQL query').item.json;\nconst wikidataItem = $('Parse Wikidata respons').item.json;\nconst nameDaItem = $('Parse Ollama name_da').item.json;\nconst soilItem = $('Parse Ollama soil').item.json;\nconst raw = (ollamaResponse.response || '').trim();\n\nlet depletes = [];\nlet restores = [];\n\nconst depletesMatch = raw.match(/DEPLETES:\\s*(.+)/i);\nconst restoresMatch = raw.match(/RESTORES:\\s*(.+)/i);\n\nif (depletesMatch) {\n  depletes = depletesMatch[1].split(',')\n    .map(s => s.trim().toLowerCase())\n    .filter(s => s !== 'none' && s !== '');\n}\n\nif (restoresMatch) {\n  restores = restoresMatch[1].split(',')\n    .map(s => s.trim().toLowerCase())\n    .filter(s => s !== 'none' && s !== '');\n}\n\nreturn {\n  json: {\n    ...originalItem,\n    family: wikidataItem.family,\n    name_da: nameDaItem.name_da,\n    prefers_soil: soilItem.prefers_soil,\n    depletes: depletes,\n    restores: restores,\n    sparql_query: undefined\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2672,
+        -224
+      ],
+      "id": "2161d4f2-6d8c-4fc2-af67-266c96e892c5",
+      "name": "Parse Ollama nutrients"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral\",\n  \"prompt\": \"For the plant '{{ $json.name_en }}' ({{ $json.name_latin }}), answer two questions about crop rotation:\\n1. Which plants grow WELL AFTER this plant? (i.e. this plant leaves the soil in good condition for them)\\n2. Which plants should be AVOIDED AFTER this plant? (i.e. they share diseases or this plant depletes what they need)\\n\\nReply in this exact format:\\nFOLLOWS_WELL_AFTER: plant1, plant2\\nAVOID_AFTER: plant1, plant2\\n\\nIf none, write FOLLOWS_WELL_AFTER: none or AVOID_AFTER: none\\nUse only common English plant names.\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2896,
+        -224
+      ],
+      "id": "8ba6b5d4-b2b9-45a9-95f7-d8e3e8cfee7e",
+      "name": "Ollama - crop rotation"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ollamaResponse = $input.item.json;\nconst originalItem = $('Byg SPARQL query').item.json;\nconst wikidataItem = $('Parse Wikidata respons').item.json;\nconst nameDaItem = $('Parse Ollama name_da').item.json;\nconst soilItem = $('Parse Ollama soil').item.json;\nconst nutrientsItem = $('Parse Ollama nutrients').item.json;\nconst raw = (ollamaResponse.response || '').trim();\n\nlet follows_well_after = [];\nlet avoid_after = [];\n\nconst followsMatch = raw.match(/FOLLOWS_WELL_AFTER:\\s*(.+)/i);\nconst avoidMatch = raw.match(/AVOID_AFTER:\\s*(.+)/i);\n\nif (followsMatch) {\n  follows_well_after = followsMatch[1].split(',')\n    .map(s => s.replace(/\\(.*?\\)/g, '').trim().toLowerCase())\n    .filter(s => s !== 'none' && s !== '' && s.length < 20);\n}\n\nif (avoidMatch) {\n  avoid_after = avoidMatch[1].split(',')\n    .map(s => s.replace(/\\(.*?\\)/g, '').trim().toLowerCase())\n    .filter(s => s !== 'none' && s !== '' && s.length < 20);\n}\n\nreturn {\n  json: {\n    ...originalItem,\n    sparql_query: undefined,\n    family: wikidataItem.family,\n    name_da: nameDaItem.name_da,\n    prefers_soil: soilItem.prefers_soil,\n    depletes: (nutrientsItem.depletes || []).filter(s => s.length < 20),\n    restores: (nutrientsItem.restores || []).filter(s => s.length < 20),\n    follows_well_after: follows_well_after,\n    avoid_after: avoid_after\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        -224
+      ],
+      "id": "ba248da8-e93b-4b0b-aa9d-425780600a10",
+      "name": "Parse Ollama crop rotation"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral\",\n  \"prompt\": \"In which seasons can '{{ $json.name_en }}' ({{ $json.name_latin }}) be planted or grown? Choose one or more from: spring, summer, fall, winter. Reply with ONLY a comma-separated list. Example: spring, summer\",\n  \"stream\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3344,
+        -224
+      ],
+      "id": "862616a1-53ff-4df7-a35d-cb9bfa4f266a",
+      "name": "Ollama - seasons"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const ollamaResponse = $input.item.json;\nconst cropRotationItem = $('Parse Ollama crop rotation').item.json;\nconst raw = (ollamaResponse.response || '').trim();\n\nconst grows_in = raw\n  .split(',')\n  .map(s => s.trim().toLowerCase())\n  .filter(Boolean);\n\nreturn {\n  json: {\n    ...cropRotationItem,\n    grows_in: grows_in\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3568,
+        -160
+      ],
+      "id": "4771f3af-b770-415e-ac42-d87ac1c114af",
+      "name": "Parse Ollama seasons"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        656,
+        -416
+      ],
+      "id": "ebff211c-736a-4039-87eb-5653bb0bc0e6",
+      "name": "Saml alle planter"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json.data;\nconst allPlants = Array.isArray(items) ? items : [items];\n\nconst output = {\n  plants: allPlants,\n  count: allPlants.length,\n  generated_at: new Date().toISOString()\n};\n\nreturn {\n  json: {},\n  binary: {\n    data: await this.helpers.prepareBinaryData(\n      Buffer.from(JSON.stringify(output, null, 2)),\n      'staging_plants.json',\n      'application/json'\n    )\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -416
+      ],
+      "id": "7d6e209c-655f-421f-9433-eb37e2da8605",
+      "name": "Byg staging JSON"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $input.item.json;\nreturn {\n  json: {\n    ...item,\n    name_en: (item.name_en || '').replace(/['\"\\\\]/g, '').replace(/\\s*\\/\\s*.*/g, '').trim(),\n    name_latin: (item.name_latin || '').replace(/['\"\\\\]/g, '').trim()\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1328,
+        -224
+      ],
+      "id": "5366a796-726a-4a18-92e4-064d0aa786a1",
+      "name": "Sanitér plantenavn"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Hent alecsharpie JSON",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Hent GenevieveMilliken CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hent alecsharpie JSON": {
+      "main": [
+        [
+          {
+            "node": "Merge datasæt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hent GenevieveMilliken CSV": {
+      "main": [
+        [
+          {
+            "node": "Merge datasæt",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge datasæt": {
+      "main": [
+        [
+          {
+            "node": "Parse og merge planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse og merge planter": {
+      "main": [
+        [
+          {
+            "node": "Loop planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop planter": {
+      "main": [
+        [
+          {
+            "node": "Saml alle planter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Byg SPARQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Byg SPARQL query": {
+      "main": [
+        [
+          {
+            "node": "Wikidata SPARQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikidata SPARQL": {
+      "main": [
+        [
+          {
+            "node": "Parse Wikidata respons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Wikidata respons": {
+      "main": [
+        [
+          {
+            "node": "Sanitér plantenavn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - name_da": {
+      "main": [
+        [
+          {
+            "node": "Parse Ollama name_da",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Ollama name_da": {
+      "main": [
+        [
+          {
+            "node": "Ollama - soil",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - soil": {
+      "main": [
+        [
+          {
+            "node": "Parse Ollama soil",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Ollama soil": {
+      "main": [
+        [
+          {
+            "node": "Ollama - nutrients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - nutrients": {
+      "main": [
+        [
+          {
+            "node": "Parse Ollama nutrients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Ollama nutrients": {
+      "main": [
+        [
+          {
+            "node": "Ollama - crop rotation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - crop rotation": {
+      "main": [
+        [
+          {
+            "node": "Parse Ollama crop rotation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Ollama crop rotation": {
+      "main": [
+        [
+          {
+            "node": "Ollama - seasons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama - seasons": {
+      "main": [
+        [
+          {
+            "node": "Parse Ollama seasons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Ollama seasons": {
+      "main": [
+        [
+          {
+            "node": "Loop planter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saml alle planter": {
+      "main": [
+        [
+          {
+            "node": "Byg staging JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Byg staging JSON": {
+      "main": [
+        []
+      ]
+    },
+    "Sanitér plantenavn": {
+      "main": [
+        [
+          {
+            "node": "Ollama - name_da",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c17fbfa9-b70b-4b29-8312-f7c1e83c56c6",
+  "meta": {
+    "instanceId": "4e60347cc22a05eaca408d33d6ea3ac8dd87c916fd5313e935135dbdd5665bad"
+  },
+  "id": "bN6F4MqvGa6Wq8Qq",
+  "tags": []
+}
