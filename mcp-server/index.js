@@ -3,11 +3,19 @@ import { randomUUID } from "crypto";
 import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
 
 const server = new McpServer({
   name: "plotplanner",
   version: "1.0.0",
 });
+
+server.tool(
+  "vector_search",
+  "Semantisk søgning i plantedata. Brug til åbne spørgsmål om dyrkningsforhold, egenskaber og teknikker.",
+  vectorSearchSchema,
+  async (args) => ({ content: [{ type: "text", text: await vectorSearch(args) }] })
+);
 
 const transport = new StreamableHTTPServerTransport({
   sessionIdGenerator: () => randomUUID(),
