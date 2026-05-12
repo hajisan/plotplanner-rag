@@ -4,6 +4,7 @@ import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
+import { graphQuery, graphQuerySchema } from "./tools/graph_query.js";
 
 const server = new McpServer({
   name: "plotplanner",
@@ -15,6 +16,13 @@ server.tool(
   "Semantisk søgning i plantedata. Brug til åbne spørgsmål om dyrkningsforhold, egenskaber og teknikker.",
   vectorSearchSchema,
   async (args) => ({ content: [{ type: "text", text: await vectorSearch(args) }] })
+);
+
+server.tool(
+  "graph_query",
+  "Henter companion planting-relationer og sædskifte for én specifik plante fra grafdatabasen.",
+  graphQuerySchema,
+  async (args) => ({ content: [{ type: "text", text: await graphQuery(args) }] })
 );
 
 const transport = new StreamableHTTPServerTransport({
