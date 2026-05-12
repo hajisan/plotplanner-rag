@@ -91,6 +91,12 @@ Smoke test kørt 12. maj 2026 via direkte JSON-RPC kald mod MCP serveren (port 3
 
 Observation: `graph_query` med "tomat" (dansk) returnerer "ikke fundet" — databasen har "Tomater" som `name_da`, og søgningen matcher kun eksakt lowercase. "tomat" ≠ "Tomater". Hermes instrueres i system_prompt om at bruge engelske plantenavne til `graph_query`.
 
+### Hermes model og tool-calling
+
+Hermes Agent bruger gemini-2.5-flash via Google AI Studio (gratis tier). llama3.1 lokalt via Ollama testedes men hallucinererede og kaldte ikke MCP tools pålideligt — modellen er for lille til tool-calling i Hermes' protokol. Gemini 2.5 Flash kalder `graph_query` korrekt på 0.1s og svarer på dansk.
+
+Systemprompten er i `AGENTS.md` i projektroden — Hermes indlæser dette automatisk fra arbejdsmappen. Instruktionerne specificerer hvornår hvert tool bruges og at svar altid skal være på dansk.
+
 ### Custom system prompt (`hermes/system_prompt.md`)
 
 *[Udfyld når system_prompt.md er skrevet — beskriv de konkrete valg: hvilke instruktioner er med, og hvorfor. Hvad forsøgte du og hvad virkede ikke?]*
