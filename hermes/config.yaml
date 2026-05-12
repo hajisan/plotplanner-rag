@@ -1,0 +1,17 @@
+llm:
+  provider: google
+  model: gemini-2.5-flash
+  # API key konfigureres i ~/.hermes/config.yaml — ikke i repo
+
+mcp:
+  servers:
+    - name: plotplanner
+      url: http://localhost:3000/mcp
+
+system_prompt: hermes/system_prompt.md
+skills_dir: hermes/skills/
+
+database:
+  url: bolt://localhost:7687
+  user: neo4j
+  password: "${NEO4J_PASSWORD}"
