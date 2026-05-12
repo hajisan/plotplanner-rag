@@ -10,9 +10,9 @@
 - [x] Neo4j vector RAG
 - [x] Neo4j graph RAG
 - [x] n8n workflows (A1, A2, B, C)
-- [ ] MCP server opsat og kørende
-- [ ] MCP eksponerer mindst ét RAG-endpoint som tool
-- [ ] Hermes Agent forbundet til MCP server
+- [x] MCP server opsat og kørende
+- [x] MCP eksponerer mindst ét RAG-endpoint som tool
+- [x] Hermes Agent forbundet til MCP server
 - [ ] Telegram-interface virker end-to-end
 
 ---
@@ -21,14 +21,14 @@
 
 Installer og forbind systemet.
 
-- [ ] Installer Hermes Agent lokalt
-- [ ] Afklar Hermes' API-interface (endpoint og request-format)
-- [ ] Hermes forbundet til Ollama (Llama 3.1)
-- [ ] MCP server bygget (`vector_search`, `graph_query` → Neo4j direkte)
-- [ ] MCP tool `season_soil_filter` → kalder n8n Workflow E webhook
+- [x] Installer Hermes Agent lokalt
+- [x] Afklar Hermes' API-interface (endpoint og request-format)
+- [x] Hermes forbundet til gemini-2.5-flash via Google AI Studio
+- [x] MCP server bygget (`vector_search`, `graph_query` → Neo4j direkte)
+- [x] MCP tool `season_soil_filter` → kalder n8n Workflow E webhook
 - [ ] n8n Workflow D bygget — Telegram Bridge (modtag besked → HTTP POST Hermes → svar til Telegram)
-- [ ] n8n Workflow E bygget — Season/Soil Filter webhook (dansk input-mapping → Neo4j Cypher)
-- [ ] Hermes kalder MCP tools korrekt
+- [x] n8n Workflow E bygget — Season/Soil Filter webhook (dansk input-mapping → Neo4j Cypher)
+- [x] Hermes kalder MCP tools korrekt
 - [ ] Telegram virker end-to-end via Workflow D → Hermes → MCP
 
 ---
@@ -37,7 +37,7 @@ Installer og forbind systemet.
 
 Justér, test og skriv rapport.
 
-- [ ] Skriv `hermes/system_prompt.md` — rolle, tool-strategi, sprog, tone *(eksaminationskrav)*
+- [x] Skriv `hermes/system_prompt.md` + `AGENTS.md` — rolle, tool-strategi, sprog, tone *(eksaminationskrav)*
 - [ ] Skriv `hermes/skills/markplan.md` — 5-trins ræsonnerings-sekvens *(eksaminationskrav)*
 - [ ] Test systemet med reelle spørgsmål om companion planting
 - [ ] Test `markplan`-skill end-to-end: sæson + jord → struktureret anbefaling

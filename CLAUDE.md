@@ -14,7 +14,7 @@ Projektet bygger videre på et 2-ugers projekt fra AI Agenter og Automatisering,
 | Agent platform | Hermes Agent (Nous Research) |
 | Workflow | n8n v2.14.2 |
 | Graf + Vector DB | Neo4j Desktop |
-| LLM / Agent | Llama 3.1 via Ollama |
+| LLM / Agent | gemini-2.5-flash via Google AI Studio |
 | Tekstgenerering (staging) | Mistral 7B via Ollama |
 | Embeddings | nomic-embed-text (768 dim, multilingual) |
 | Interface | Telegram |
@@ -110,8 +110,9 @@ Telegram
 n8n Workflow D — Telegram Bridge
    │  HTTP POST til Hermes API
    ▼
-Hermes Agent (Llama 3.1 via Ollama)
-   ├── hermes/system_prompt.md    ← custom system prompt
+Hermes Agent (gemini-2.5-flash via Google AI Studio)
+   ├── AGENTS.md                  ← system prompt (læses automatisk fra CWD)
+   ├── hermes/system_prompt.md    ← kopi til dokumentation
    ├── hermes/skills/markplan.md  ← custom skill
    │
    └──► MCP Server (localhost:3000)
@@ -124,11 +125,15 @@ Hermes Agent (Llama 3.1 via Ollama)
 
 ## Hermes konfiguration
 
-**system_prompt.md** — Definerer agentens rolle, tool-strategi og tone:
+**Model**: gemini-2.5-flash via Google AI Studio (gratis tier). llama3.1 lokalt via Ollama testedes men var for svag til tool-calling.
+
+**AGENTS.md** (projektroden) — Hermes indlæser automatisk fra arbejdsmappen (CWD). Definerer agentens rolle, tool-strategi og tone:
 - Rolle: erfaren markplanlægger til regenerativt landbrug
 - Eksplicit tool-strategi: hvornår bruges `vector_search` vs `graph_query` vs `season_soil_filter`
 - Kombinerer tools ved komplekse spørgsmål
 - Kommunikerer altid på dansk
+
+**hermes/system_prompt.md** — Identisk kopi til dokumentation og eksaminationsreference.
 
 **skills/markplan.md** — Fast ræsonnerings-sekvens til markplaner:
 1. Afklar sæson og jordbundstype
@@ -136,6 +141,8 @@ Hermes Agent (Llama 3.1 via Ollama)
 3. Kald `graph_query` for top-kandidater
 4. Kald `vector_search` for dyrkningsbeskrivelser
 5. Syntetiser og præsenter anbefaling
+
+**Hermes config** lever i `~/.hermes/config.yaml` (ikke i repo). `hermes/config.yaml` i projektet er dokumentation af de valgte indstillinger.
 
 ---
 
