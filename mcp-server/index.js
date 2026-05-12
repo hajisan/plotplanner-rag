@@ -7,45 +7,60 @@ import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
 import { graphQuery, graphQuerySchema } from "./tools/graph_query.js";
 import { seasonSoilFilter, seasonSoilFilterSchema } from "./tools/season_soil_filter.js";
 
-const server = new McpServer({
-  name: "plotplanner",
-  version: "1.0.0",
-});
+function createServer() {
+  const server = new McpServer({ name: "plotplanner", version: "1.0.0" });
 
-server.tool(
-  "vector_search",
-  "Semantisk søgning i plantedata. Brug til åbne spørgsmål om dyrkningsforhold, egenskaber og teknikker.",
-  vectorSearchSchema,
-  async (args) => ({ content: [{ type: "text", text: await vectorSearch(args) }] })
-);
+  server.tool("vector_search",
+    "Semantisk søgning i plantedata. Brug til åbne spørgsmål om dyrkningsforhold, egenskaber og teknikker.",
+    vectorSearchSchema,
+    async (args) => ({ content: [{ type: "text", text: await vectorSearch(args) }] })
+  );
+  server.tool("graph_query",
+    "Henter companion planting-relationer og sædskifte for én specifik plante fra grafdatabasen.",
+    graphQuerySchema,
+    async (args) => ({ content: [{ type: "text", text: await graphQuery(args) }] })
+  );
+  server.tool("season_soil_filter",
+    "Filtrerer planter på sæson, jordbundstype og fugtighed. Understøtter dansk og engelsk input. Returnerer liste af egnede planter.",
+    seasonSoilFilterSchema,
+    async (args) => ({ content: [{ type: "text", text: await seasonSoilFilter(args) }] })
+  );
 
-server.tool(
-  "graph_query",
-  "Henter companion planting-relationer og sædskifte for én specifik plante fra grafdatabasen.",
-  graphQuerySchema,
-  async (args) => ({ content: [{ type: "text", text: await graphQuery(args) }] })
-);
+  return server;
+}
 
-server.tool(
-  "season_soil_filter",
-  "Filtrerer planter på sæson, jordbundstype og fugtighed. Understøtter dansk og engelsk input. Returnerer liste af egnede planter.",
-  seasonSoilFilterSchema,
-  async (args) => ({ content: [{ type: "text", text: await seasonSoilFilter(args) }] })
-);
-
-const transport = new StreamableHTTPServerTransport({
-  sessionIdGenerator: () => randomUUID(),
-});
-
-await server.connect(transport);
+const sessions = new Map();
 
 const app = express();
 app.use(express.json());
 
 app.all("/mcp", async (req, res) => {
-  // Hermes sender ikke Accept: text/event-stream — tilføj det så StreamableHTTP-transporten accepterer kaldet
   if (!req.headers.accept?.includes("text/event-stream")) {
     req.headers.accept = "application/json, text/event-stream";
+  }
+
+  const sessionId = req.headers["mcp-session-id"];
+
+  if (!sessionId) {
+    const transport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: () => randomUUID(),
+      onsessioninitialized: (id) => sessions.set(id, transport),
+    });
+    transport.onclose = () => {
+      for (const [id, t] of sessions) {
+        if (t === transport) { sessions.delete(id); break; }
+      }
+    };
+    const server = createServer();
+    await server.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+    return;
+  }
+
+  const transport = sessions.get(sessionId);
+  if (!transport) {
+    res.status(404).json({ error: "Session ikke fundet" });
+    return;
   }
   await transport.handleRequest(req, res, req.body);
 });
