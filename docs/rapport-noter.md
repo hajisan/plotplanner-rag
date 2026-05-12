@@ -81,6 +81,16 @@ n8n bruges til to distinkte formål i det samlede system:
 
 Workflow E lever i n8n frem for direkte i MCP-serveren fordi mapping-logikken (dansk → engelsk, f.eks. "forår" → "spring", "lerjord" → "clay") er naturlig at vedligeholde i en visuel workflow. Det er nemt at udvide mappingen uden at ændre MCP-serverens kode.
 
+### MCP smoke test — alle tre tools verificeret
+
+Smoke test kørt 12. maj 2026 via direkte JSON-RPC kald mod MCP serveren (port 3000):
+
+- **vector_search** ("tomat companion planting", limit 3): returnerede radish (0.79), parsnip (0.79), carrots (0.77) — semantisk søgning virker på tværs af dansk/engelsk input
+- **graph_query** ("tomatoes"): returnerede companions (peppers, cabbage, asparagus...), antagonister (peas, corn, dill...) og sædskifte-relationer korrekt
+- **season_soil_filter** (forår/ler): returnerede 53 planter via n8n Workflow E — dansk input mappes korrekt
+
+Observation: `graph_query` med "tomat" (dansk) returnerer "ikke fundet" — databasen har "Tomater" som `name_da`, og søgningen matcher kun eksakt lowercase. "tomat" ≠ "Tomater". Hermes instrueres i system_prompt om at bruge engelske plantenavne til `graph_query`.
+
 ### Custom system prompt (`hermes/system_prompt.md`)
 
 *[Udfyld når system_prompt.md er skrevet — beskriv de konkrete valg: hvilke instruktioner er med, og hvorfor. Hvad forsøgte du og hvad virkede ikke?]*
