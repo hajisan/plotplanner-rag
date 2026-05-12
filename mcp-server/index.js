@@ -1,8 +1,7 @@
 import "dotenv/config";
-import { randomUUID } from "crypto";
 import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
 import { graphQuery, graphQuerySchema } from "./tools/graph_query.js";
 import { seasonSoilFilter, seasonSoilFilterSchema } from "./tools/season_soil_filter.js";
@@ -33,17 +32,26 @@ server.tool(
   async (args) => ({ content: [{ type: "text", text: await seasonSoilFilter(args) }] })
 );
 
-const transport = new StreamableHTTPServerTransport({
-  sessionIdGenerator: () => randomUUID(),
-});
-
-await server.connect(transport);
-
 const app = express();
 app.use(express.json());
 
-app.all("/mcp", async (req, res) => {
-  await transport.handleRequest(req, res, req.body);
+const transports = {};
+
+app.get("/sse", async (_req, res) => {
+  const transport = new SSEServerTransport("/messages", res);
+  transports[transport.sessionId] = transport;
+  res.on("close", () => delete transports[transport.sessionId]);
+  await server.connect(transport);
+});
+
+app.post("/messages", async (req, res) => {
+  const sessionId = req.query.sessionId;
+  const transport = transports[sessionId];
+  if (!transport) {
+    res.status(400).json({ error: "Ukendt session" });
+    return;
+  }
+  await transport.handlePostMessage(req, res);
 });
 
 const PORT = process.env.PORT || 3000;
