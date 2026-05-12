@@ -1,0 +1,98 @@
+{
+  "name": "Workflow E — Season/Soil Filter webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "season-soil-filter",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [0, 0],
+      "id": "291a79f6-4dc9-46dc-a5af-920d7935212a",
+      "name": "Webhook",
+      "webhookId": "24913e58-d84a-4200-a8b3-bece16a76a21"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mapping = {\n  season: { 'forår':'spring','spring':'spring','sommer':'summer','summer':'summer','efterår':'fall','fall':'fall','autumn':'fall','vinter':'winter','winter':'winter' },\n  soil_type: { 'sand':'sandy','sandet':'sandy','sandy':'sandy','ler':'clay','lerjord':'clay','clay':'clay','muld':'loamy','muldjord':'loamy','loamy':'loamy','kalk':'chalky','kalkjord':'chalky','chalky':'chalky','tørv':'peaty','tørvejord':'peaty','peaty':'peaty','silt':'silty','siltjord':'silty','silty':'silty' },\n  moisture: { 'veldrænet':'well-drained','well-drained':'well-drained','fugtig':'moist but well-drained','moist but well-drained':'moist but well-drained','våd':'poorly drained','poorly drained':'poorly drained' },\n};\nconst body = $input.first().json.body;\nreturn [{ json: {\n  season:    mapping.season[   (body.season    || '').toLowerCase()] ?? '',\n  soil_type: mapping.soil_type[(body.soil_type || '').toLowerCase()] ?? '',\n  moisture:  mapping.moisture[ (body.moisture  || '').toLowerCase()] ?? ''\n} }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [208, 0],
+      "id": "3dd4582a-adec-4900-a1ea-8bdddb727fc3",
+      "name": "Normalize Input"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:7474/db/neo4j/tx/commit",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "neo4jApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ \"statements\": [{ \"statement\": \"MATCH (p:Plant) WHERE ($season = '' OR (p)-[:GROWS_IN]->(:Season {name: $season})) AND ($soil_type = '' OR (p)-[:PREFERS_SOIL]->(:SoilType {name: $soil_type})) AND ($moisture = '' OR (p)-[:PREFERS_MOISTURE]->(:Moisture {name: $moisture})) RETURN p.name_en AS name_en, p.name_da AS name_da, p.type AS type, p.edible AS edible ORDER BY p.name_en\", \"parameters\": { \"season\": $json.season, \"soil_type\": $json.soil_type, \"moisture\": $json.moisture } }] }) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [400, 0],
+      "id": "453ecee4-ebae-4b9c-af8e-390c9a5f301e",
+      "name": "Query Neo4j",
+      "credentials": {
+        "neo4jApi": {
+          "id": "8MjPc7ZohW9mKryp",
+          "name": "Neo4j account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.first().json.results?.[0]?.data ?? [];\nif (rows.length === 0) return [{ json: { plants: [], message: \"Ingen planter matcher betingelserne.\" } }];\nconst plants = rows.map(r => ({ name_en: r.row[0], name_da: r.row[1], type: r.row[2], edible: r.row[3] }));\nreturn [{ json: { plants, count: plants.length } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [592, 0],
+      "id": "15dbd0f0-3c8b-4999-81f4-a398ecf126d2",
+      "name": "Format Response"
+    },
+    {
+      "parameters": {
+        "respondWith": "firstIncomingItem",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [800, 0],
+      "id": "e3affe13-3dab-422f-8a6e-0a3cb35126d7",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Normalize Input", "type": "main", "index": 0 }]]
+    },
+    "Normalize Input": {
+      "main": [[{ "node": "Query Neo4j", "type": "main", "index": 0 }]]
+    },
+    "Query Neo4j": {
+      "main": [[{ "node": "Format Response", "type": "main", "index": 0 }]]
+    },
+    "Format Response": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a5ff382f-7b46-49f2-998b-1de722a807ed",
+  "meta": {
+    "instanceId": "4e60347cc22a05eaca408d33d6ea3ac8dd87c916fd5313e935135dbdd5665bad"
+  },
+  "id": "O9QFzc1LkZUKKnDJ",
+  "tags": []
+}
