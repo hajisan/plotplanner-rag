@@ -22,11 +22,17 @@ const env = readDotEnv(path.join(__dirname, '../mcp-server/.env'));
 const NEO4J_USER = env.NEO4J_USER || 'neo4j';
 const NEO4J_PASSWORD = env.NEO4J_PASSWORD || '';
 const GATEWAY_LOG = path.join(process.env.HOME, '.hermes/logs/gateway.log');
+const SESSIONS_DIR = path.join(process.env.HOME, '.hermes/sessions');
+
+// Gemini 2.5 Flash: ~$0.001 per API call (input + output avg), 1 USD = 7 DKK
+const COST_PER_CALL_ORE = 0.001 * 7 * 100; // øre
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 const clients = new Set();
+let sessionCostOre = 0;
+let sessionCalls = 0;
 
 function broadcast(event, data) {
   const msg = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -42,6 +48,7 @@ app.get('/events', (req, res) => {
   req.on('close', () => clients.delete(res));
   doHealthChecks();
   doNeo4jStats();
+  broadcast('cost', { ore: sessionCostOre.toFixed(2), calls: sessionCalls });
 });
 
 function checkTCP(port, timeout = 1500) {
@@ -102,13 +109,14 @@ async function doNeo4jStats() {
   } catch { /* Neo4j offline */ }
 }
 
+// ── Gateway log tail ──────────────────────────────────────────────────────────
+
 let logPosition = 0;
-try { logPosition = fs.statSync(GATEWAY_LOG).size; } catch { /* log not yet created */ }
+try { logPosition = fs.statSync(GATEWAY_LOG).size; } catch { /* not yet created */ }
 
 function tailLog() {
   let stat;
   try { stat = fs.statSync(GATEWAY_LOG); } catch { return; }
-
   if (stat.size < logPosition) logPosition = 0;
   if (stat.size === logPosition) return;
 
@@ -131,18 +139,78 @@ function tailLog() {
     }
     const response = line.match(/response ready:.*?time=(\S+)\s+api_calls=(\d+)/);
     if (response) {
+      const calls = parseInt(response[2]);
+      sessionCalls += calls;
+      sessionCostOre += calls * COST_PER_CALL_ORE;
       broadcast('log', {
         type: 'response',
         time_taken: response[1],
-        api_calls: parseInt(response[2]),
+        api_calls: calls,
+        cost_ore: (calls * COST_PER_CALL_ORE).toFixed(2),
         time: new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       });
+      broadcast('cost', { ore: sessionCostOre.toFixed(2), calls: sessionCalls });
     }
   }
+}
+
+// ── Session JSONL tail for tool calls ─────────────────────────────────────────
+
+const sessionPositions = new Map();
+
+function shortName(name) {
+  return name.replace('mcp_plotplanner_', '');
+}
+
+// Initialise positions to current end so we only catch new calls
+function initSessionPositions() {
+  try {
+    for (const f of fs.readdirSync(SESSIONS_DIR).filter(f => f.endsWith('.jsonl'))) {
+      const full = path.join(SESSIONS_DIR, f);
+      try { sessionPositions.set(full, fs.statSync(full).size); } catch { /* skip */ }
+    }
+  } catch { /* dir missing */ }
+}
+initSessionPositions();
+
+function tailSessions() {
+  try {
+    for (const f of fs.readdirSync(SESSIONS_DIR).filter(f => f.endsWith('.jsonl'))) {
+      const full = path.join(SESSIONS_DIR, f);
+      let stat;
+      try { stat = fs.statSync(full); } catch { continue; }
+
+      const pos = sessionPositions.get(full) ?? stat.size;
+      if (stat.size <= pos) continue;
+
+      const buf = Buffer.alloc(stat.size - pos);
+      const fd = fs.openSync(full, 'r');
+      fs.readSync(fd, buf, 0, buf.length, pos);
+      fs.closeSync(fd);
+      sessionPositions.set(full, stat.size);
+
+      for (const line of buf.toString('utf8').split('\n').filter(Boolean)) {
+        try {
+          const obj = JSON.parse(line);
+          if (obj.role === 'assistant' && Array.isArray(obj.tool_calls)) {
+            for (const tc of obj.tool_calls) {
+              const name = tc.function?.name;
+              if (!name) continue;
+              broadcast('tool', {
+                name: shortName(name),
+                time: new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              });
+            }
+          }
+        } catch { /* skip malformed line */ }
+      }
+    }
+  } catch { /* sessions dir missing */ }
 }
 
 setInterval(doHealthChecks, 5000);
 setInterval(doNeo4jStats, 30000);
 setInterval(tailLog, 1000);
+setInterval(tailSessions, 1000);
 
 app.listen(3001, () => console.log('Dashboard: http://localhost:3001'));

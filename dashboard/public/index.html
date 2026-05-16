@@ -204,7 +204,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       margin-bottom: 16px;
     }
@@ -275,6 +275,19 @@
     .f-meta { color: var(--muted); }
 
     .feed-empty { color: var(--muted); font-style: italic; padding: 6px 0; }
+
+    /* Tool badges */
+    .tool-badge {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .tool-graph_query       { background: #1f3d22; color: var(--green-bright); }
+    .tool-vector_search     { background: #1a2f4a; color: var(--blue); }
+    .tool-season_soil_filter{ background: #3d2e0e; color: #e3a835; }
   </style>
 </head>
 <body>
@@ -370,6 +383,10 @@
     <div class="stat-val" id="stat-rels">&#x2014;</div>
     <div class="stat-lbl">Graf-relationer</div>
   </div>
+  <div class="stat">
+    <div class="stat-val" id="stat-cost" style="font-size:22px">0.00</div>
+    <div class="stat-lbl">&#xF8re brugt (est.)</div>
+  </div>
 </div>
 
 <div class="feed-wrap">
@@ -448,12 +465,20 @@
       dSpan.textContent = '←';
       mSpan.textContent = (data.user || '') + ': ' + (data.msg || '');
       triggerFlow();
+    } else if (data.type === 'tool') {
+      li.className = 'feed-row';
+      dSpan.style.color = 'var(--muted)';
+      dSpan.textContent = '⚙';
+      const badge = document.createElement('span');
+      badge.className = 'tool-badge tool-' + data.name;
+      badge.textContent = data.name;
+      mSpan.appendChild(badge);
     } else {
       li.className = 'feed-row';
       dSpan.style.color = 'var(--green-bright)';
       dSpan.textContent = '→';
       mSpan.className = 'f-msg f-meta';
-      mSpan.textContent = 'svar: ' + (data.time_taken || '?') + ' · ' + (data.api_calls || 0) + ' tool calls';
+      mSpan.textContent = 'svar: ' + (data.time_taken || '?') + ' · ' + (data.api_calls || 0) + ' kald · ~' + (data.cost_ore || '0') + ' øre';
     }
 
     li.appendChild(tSpan);
@@ -510,6 +535,15 @@
       flashStat('stat-plants', s.plants);
       flashStat('stat-chunks', s.chunks);
       flashStat('stat-rels',   s.relations);
+    });
+
+    es.addEventListener('tool', function(e) {
+      addFeedRow(Object.assign(JSON.parse(e.data), { type: 'tool' }));
+    });
+
+    es.addEventListener('cost', function(e) {
+      const c = JSON.parse(e.data);
+      document.getElementById('stat-cost').textContent = c.ore;
     });
   }
 
