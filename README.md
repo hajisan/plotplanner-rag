@@ -140,6 +140,10 @@ cd mcp-server && npm install && npm start
 hermes gateway run   # eller: hermes gateway start (baggrund)
 
 # 6. Chat via Telegram — send besked til botten
+
+# 7. Dashboard (valgfrit — live service-status + event feed)
+cd dashboard && npm install && npm start
+# Åbn http://localhost:3001
 ```
 
 **Første gang**: kør `hermes gateway setup` for at konfigurere Telegram bot token.

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlotPlanner — Live</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #2ea043;
+      --green-bright: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --blue: #58a6ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-monospace, 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+
+    header h1 { font-size: 15px; font-weight: 600; }
+    header p { font-size: 11px; color: var(--muted); }
+
+    .conn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .conn-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+    .conn-dot.live {
+      background: var(--green-bright);
+      animation: blink 2.4s ease-in-out infinite;
+    }
+    .conn-dot.dead { background: var(--red); }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* ─── Architecture flow ─────────────────────────────────── */
+
+    .arch {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 16px 16px;
+      margin-bottom: 16px;
+    }
+
+    .arch-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .svc {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .svc-box {
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 88px;
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+    .svc-box .icon { font-size: 20px; display: block; margin-bottom: 3px; line-height: 1; }
+    .svc-box .name { font-size: 11px; color: var(--muted); }
+
+    .svc-box.online   { border-color: var(--green); }
+    .svc-box.offline  { border-color: var(--red); }
+    .svc-box.checking { border-color: var(--yellow); }
+
+    .svc-box.flash {
+      box-shadow: 0 0 14px var(--green-bright);
+      border-color: var(--green-bright);
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+    .status-dot.online  { background: var(--green-bright); }
+    .status-dot.offline { background: var(--red); }
+
+    .h-arrow {
+      flex: 1;
+      min-width: 20px;
+      height: 2px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+      align-self: center;
+      margin-bottom: 28px;
+    }
+
+    .h-arrow::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      right: -1px;
+      width: 0;
+      height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 6px solid var(--border);
+    }
+
+    @keyframes slide-right {
+      from { left: -40px; }
+      to   { left: 110%; }
+    }
+
+    .h-arrow.active::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      height: 8px;
+      width: 36px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, transparent, var(--green-bright), transparent);
+      animation: slide-right 0.55s ease-in-out forwards;
+    }
+
+    .mcp-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .v-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .v-arrow {
+      width: 2px;
+      height: 22px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes slide-down {
+      from { top: -22px; }
+      to   { top: 110%; }
+    }
+
+    .v-arrow.active::before {
+      content: '';
+      position: absolute;
+      left: -3px;
+      width: 8px;
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, transparent, var(--yellow), transparent);
+      animation: slide-down 0.55s ease-in-out forwards;
+    }
+
+    /* ─── Stats ─────────────────────────────────────────────── */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1;
+      margin-bottom: 5px;
+      transition: color 0.4s;
+    }
+    .stat-val.flash { color: var(--green-bright); }
+    .stat-lbl { font-size: 11px; color: var(--muted); }
+
+    /* ─── Event feed ─────────────────────────────────────────── */
+
+    .feed-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .feed-hdr {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .feed {
+      list-style: none;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .feed::-webkit-scrollbar { width: 4px; }
+    .feed::-webkit-scrollbar-track { background: transparent; }
+    .feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .feed-row {
+      display: flex;
+      gap: 8px;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+      animation: drop-in 0.25s ease;
+    }
+    .feed-row:last-child { border-bottom: none; }
+
+    @keyframes drop-in {
+      from { opacity: 0; transform: translateY(-5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .f-time { color: var(--muted); min-width: 64px; flex-shrink: 0; }
+    .f-dir  { min-width: 14px; flex-shrink: 0; }
+    .f-msg  { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .f-meta { color: var(--muted); }
+
+    .feed-empty { color: var(--muted); font-style: italic; padding: 6px 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>PlotPlanner — Live Arkitektur</h1>
+    <p>KEA &middot; AI Agenter og Automatisering &middot; 4. semester</p>
+  </div>
+  <div class="conn">
+    <div class="conn-dot" id="conn-dot"></div>
+    <span id="conn-lbl">Forbinder...</span>
+  </div>
+</header>
+
+<div class="arch">
+  <div class="arch-label">Runtime</div>
+  <div class="flow-row">
+
+    <div class="svc">
+      <div class="svc-box online" id="svc-telegram">
+        <span class="icon">&#x1F4F1;</span>
+        <span class="name">Telegram</span>
+      </div>
+      <div class="status-dot online"></div>
+    </div>
+
+    <div class="h-arrow" id="arr-1"></div>
+
+    <div class="svc">
+      <div class="svc-box checking" id="svc-gateway">
+        <span class="icon">&#x1F50C;</span>
+        <span class="name">Gateway</span>
+      </div>
+      <div class="status-dot" id="dot-gateway"></div>
+    </div>
+
+    <div class="h-arrow" id="arr-2"></div>
+
+    <div class="svc">
+      <div class="svc-box checking" id="svc-agent">
+        <span class="icon">&#x1F916;</span>
+        <span class="name">Agent</span>
+      </div>
+      <div class="status-dot" id="dot-agent"></div>
+    </div>
+
+    <div class="h-arrow" id="arr-3"></div>
+
+    <div class="mcp-col">
+      <div class="svc">
+        <div class="svc-box checking" id="svc-mcp">
+          <span class="icon">&#x1F527;</span>
+          <span class="name">MCP Server</span>
+        </div>
+        <div class="status-dot" id="dot-mcp"></div>
+      </div>
+      <div class="v-branch">
+        <div class="v-arrow" id="arr-v"></div>
+        <div class="svc">
+          <div class="svc-box checking" id="svc-n8n">
+            <span class="icon">&#x2699;&#xFE0F;</span>
+            <span class="name">n8n Wf.E</span>
+          </div>
+          <div class="status-dot" id="dot-n8n"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="h-arrow" id="arr-4"></div>
+
+    <div class="svc">
+      <div class="svc-box checking" id="svc-neo4j">
+        <span class="icon">&#x1F5C4;&#xFE0F;</span>
+        <span class="name">Neo4j</span>
+      </div>
+      <div class="status-dot" id="dot-neo4j"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-val" id="stat-plants">&#x2014;</div>
+    <div class="stat-lbl">Planter</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val" id="stat-chunks">&#x2014;</div>
+    <div class="stat-lbl">Vector chunks</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val" id="stat-rels">&#x2014;</div>
+    <div class="stat-lbl">Graf-relationer</div>
+  </div>
+</div>
+
+<div class="feed-wrap">
+  <div class="feed-hdr">Live events</div>
+  <ul class="feed" id="feed">
+    <li class="feed-empty">Venter p&#xE5; beskeder fra Telegram...</li>
+  </ul>
+</div>
+
+<script>
+  const ARROW_IDS = ['arr-1', 'arr-2', 'arr-3', 'arr-4'];
+  const FLASH_SVCS = ['svc-gateway', 'svc-agent', 'svc-mcp', 'svc-neo4j'];
+
+  function setSvc(name, status) {
+    const box = document.getElementById('svc-' + name);
+    const dot = document.getElementById('dot-' + name);
+    if (box) box.className = 'svc-box ' + status;
+    if (dot) dot.className = 'status-dot ' + status;
+  }
+
+  function pulse(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+    setTimeout(() => el.classList.remove('flash'), 800);
+  }
+
+  function triggerFlow() {
+    ARROW_IDS.forEach(function(id, i) {
+      setTimeout(function() {
+        const el = document.getElementById(id);
+        el.classList.remove('active');
+        void el.offsetWidth;
+        el.classList.add('active');
+        setTimeout(() => el.classList.remove('active'), 600);
+      }, i * 180);
+    });
+    FLASH_SVCS.forEach(function(id, i) {
+      setTimeout(() => pulse(id), i * 180 + 90);
+    });
+  }
+
+  function triggerN8nBranch() {
+    const v = document.getElementById('arr-v');
+    v.classList.remove('active');
+    void v.offsetWidth;
+    v.classList.add('active');
+    setTimeout(function() {
+      v.classList.remove('active');
+      pulse('svc-n8n');
+    }, 400);
+  }
+
+  function addFeedRow(data) {
+    const feed = document.getElementById('feed');
+    const empty = feed.querySelector('.feed-empty');
+    if (empty) empty.remove();
+
+    const li = document.createElement('li');
+
+    const tSpan = document.createElement('span');
+    tSpan.className = 'f-time';
+    tSpan.textContent = data.time;
+
+    const dSpan = document.createElement('span');
+    dSpan.className = 'f-dir';
+
+    const mSpan = document.createElement('span');
+    mSpan.className = 'f-msg';
+
+    if (data.type === 'inbound') {
+      li.className = 'feed-row';
+      dSpan.style.color = 'var(--blue)';
+      dSpan.textContent = '←';
+      mSpan.textContent = (data.user || '') + ': ' + (data.msg || '');
+      triggerFlow();
+    } else {
+      li.className = 'feed-row';
+      dSpan.style.color = 'var(--green-bright)';
+      dSpan.textContent = '→';
+      mSpan.className = 'f-msg f-meta';
+      mSpan.textContent = 'svar: ' + (data.time_taken || '?') + ' · ' + (data.api_calls || 0) + ' tool calls';
+    }
+
+    li.appendChild(tSpan);
+    li.appendChild(dSpan);
+    li.appendChild(mSpan);
+    feed.prepend(li);
+
+    while (feed.children.length > 60) feed.removeChild(feed.lastChild);
+  }
+
+  function flashStat(id, newVal) {
+    const el = document.getElementById(id);
+    if (!el || el.textContent === String(newVal)) return;
+    el.textContent = newVal;
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+    setTimeout(() => el.classList.remove('flash'), 700);
+  }
+
+  let es;
+  function connect() {
+    es = new EventSource('/events');
+
+    es.addEventListener('open', function() {
+      document.getElementById('conn-dot').className = 'conn-dot live';
+      document.getElementById('conn-lbl').textContent = 'Live';
+    });
+
+    es.addEventListener('error', function() {
+      document.getElementById('conn-dot').className = 'conn-dot dead';
+      document.getElementById('conn-lbl').textContent = 'Afbrudt — pr\xF8ver igen...';
+      es.close();
+      setTimeout(connect, 3000);
+    });
+
+    es.addEventListener('health', function(e) {
+      const h = JSON.parse(e.data);
+      setSvc('gateway', h.gateway || 'offline');
+      setSvc('agent',   h.gateway || 'offline');
+      setSvc('mcp',     h.mcp     || 'offline');
+      setSvc('n8n',     h.n8n     || 'offline');
+      setSvc('neo4j',   h.neo4j   || 'offline');
+    });
+
+    es.addEventListener('log', function(e) {
+      const d = JSON.parse(e.data);
+      addFeedRow(d);
+      if (d.type === 'response' && d.api_calls >= 3) triggerN8nBranch();
+    });
+
+    es.addEventListener('stats', function(e) {
+      const s = JSON.parse(e.data);
+      flashStat('stat-plants', s.plants);
+      flashStat('stat-chunks', s.chunks);
+      flashStat('stat-rels',   s.relations);
+    });
+  }
+
+  connect();
+</script>
+
+</body>
+</html>
