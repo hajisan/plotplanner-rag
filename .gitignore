@@ -10,3 +10,6 @@ Thumbs.db
 # MCP server
 mcp-server/.env
 mcp-server/node_modules/
+
+# Dashboard
+dashboard/node_modules/
