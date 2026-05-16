@@ -35,9 +35,13 @@ export async function seasonSoilFilter({ season, soil_type, moisture }) {
     return "Ingen planter matcher de angivne betingelser.";
   }
 
-  const lines = data.plants.map(
-    (p) => `- ${p.name_en} (${p.name_da}) — ${p.type}${p.edible ? "" : " [ikke spiselig]"}`
-  );
+  const PRIORITY = ["Grøntsag", "Urter", "Frugt", "Blomster", "Andet"];
+  const edible = data.plants
+    .filter((p) => p.edible !== false)
+    .sort((a, b) => PRIORITY.indexOf(a.type) - PRIORITY.indexOf(b.type))
+    .slice(0, 10);
 
-  return `**${data.count} planter matcher:**\n\n${lines.join("\n")}`;
+  const lines = edible.map((p) => `- ${p.name_en} (${p.name_da})`);
+
+  return `**${data.plants.length} planter matcher. Top ${edible.length} anbefalede til markplan:**\n\n${lines.join("\n")}\n\nBrug disse som udgangspunkt for videre analyse.`;
 }
