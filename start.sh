@@ -52,6 +52,10 @@ if port_open 7687; then
 else
   info "Åbner Neo4j Desktop — klik 'Start' på din database"
   open -a "Neo4j Desktop" 2>/dev/null || true
+  printf "  Venter på Neo4j"
+  until port_open 7687; do printf '.'; sleep 2; done
+  echo ""
+  ok "Neo4j klar"
 fi
 
 # ── n8n ───────────────────────────────────────────────────────────────────────
