@@ -13,7 +13,7 @@
 - [x] MCP server opsat og kørende
 - [x] MCP eksponerer mindst ét RAG-endpoint som tool
 - [x] Hermes Agent forbundet til MCP server
-- [ ] Telegram-interface virker end-to-end
+- [x] Telegram-interface virker end-to-end
 
 ---
 
@@ -26,10 +26,10 @@ Installer og forbind systemet.
 - [x] Hermes forbundet til gemini-2.5-flash via Google AI Studio
 - [x] MCP server bygget (`vector_search`, `graph_query` → Neo4j direkte)
 - [x] MCP tool `season_soil_filter` → kalder n8n Workflow E webhook
-- [ ] n8n Workflow D bygget — Telegram Bridge (modtag besked → HTTP POST Hermes → svar til Telegram)
+- [x] Telegram-interface konfigureret via Hermes built-in gateway (launchd service) — Workflow D ikke nødvendigt
 - [x] n8n Workflow E bygget — Season/Soil Filter webhook (dansk input-mapping → Neo4j Cypher)
 - [x] Hermes kalder MCP tools korrekt
-- [ ] Telegram virker end-to-end via Workflow D → Hermes → MCP
+- [x] Telegram virker end-to-end via Hermes Gateway → Hermes Agent → MCP
 
 ---
 
