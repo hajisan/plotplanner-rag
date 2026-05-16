@@ -41,7 +41,7 @@ Justér, test og skriv rapport.
 - [x] Skriv `hermes/skills/markplan.md` — 5-trins ræsonnerings-sekvens *(eksaminationskrav)*
 - [x] Test systemet med reelle spørgsmål om companion planting
 - [x] Test `markplan`-skill end-to-end: sæson + jord → struktureret anbefaling
-- [ ] Arkitekturdiagram færdigt
+- [x] Arkitekturdiagram færdigt
 - [x] System kører stabilt end-to-end
 - [ ] Rapport — side 1: platform, arkitektur og modelreflection (inkl. Hermes vs. NanoClaw)
 - [ ] Rapport — side 2-3: implementering (inkl. system_prompt + markplan skill med forklaring)
@@ -57,7 +57,7 @@ Finpuds og aflever.
 - [ ] Rapport korrekturlæst og max 5 sider
 - [x] CLAUDE.md opdateret og korrekt
 - [x] Repo ryddet op — ingen credentials, README korrekt
-- [ ] System testet fra bunden (clean boot)
+- [x] System testet fra bunden (clean boot)
 - [ ] Afleveret
 
 ---
