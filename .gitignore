@@ -13,3 +13,8 @@ mcp-server/node_modules/
 
 # Dashboard
 dashboard/node_modules/
+
+# Runtime
+.demo-pids
+logs/
+docs/~$*.docx

@@ -50,6 +50,20 @@ Justér, test og skriv rapport.
 
 ---
 
+## Uge 21 — tekniske justeringer (efter rapport-deadline)
+
+- [x] Live arkitektur-dashboard (`dashboard/`) — service-status, event feed, Neo4j stats
+- [x] `start.sh` — starter n8n, MCP, dashboard, Hermes; åbner Telegram og browser
+- [x] `plotplannerstart` / `plotplannerstop` aliases i .zshrc
+- [x] Hermes launchd WorkingDirectory rettet → project dir (AGENTS.md loades nu korrekt)
+- [x] Hermes sessions ryddet → frisk session med korrekt system prompt
+- [x] Gemini billing aktiveret (cap 50 kr) — fri tier holdt ikke til demo
+- [x] `season_soil_filter` begrænset til top 10 spiselige planter — forhindrer at agenten viser lang liste
+- [x] AGENTS.md markplan-sekvens strammet — forbyder kommunikation før trin 5
+- [x] `docs/eksamen-noter.md` oprettet med demo-spørgsmål og refleksioner
+
+---
+
 ## Deadline — 24.–26. maj
 
 Finpuds og aflever.
