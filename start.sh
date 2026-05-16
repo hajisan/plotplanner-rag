@@ -112,6 +112,7 @@ echo ""
 echo -e "${BLD}Dashboard:${NC} http://localhost:3001"
 echo ""
 open "http://localhost:3001" 2>/dev/null || true
+open -a Telegram 2>/dev/null || true
 
 echo -e "Stop alt:  ${BLD}./start.sh stop${NC}"
 echo ""
