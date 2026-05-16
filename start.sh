@@ -59,7 +59,7 @@ if port_open 5678; then
   ok "n8n kører allerede (port 5678)"
 else
   info "Starter n8n..."
-  npx --yes n8n start > "$LOG_DIR/n8n.log" 2>&1 &
+  bash ~/scripts/n8n-launcher/start.sh > "$LOG_DIR/n8n.log" 2>&1 &
   echo "$! n8n" >> "$PID_FILE"
 fi
 
