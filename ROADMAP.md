@@ -9,7 +9,7 @@
 
 - [x] Neo4j vector RAG
 - [x] Neo4j graph RAG
-- [x] n8n workflows (A1, A2, B, C)
+- [x] n8n workflows (A1, A2, B, E)
 - [x] MCP server opsat og kørende
 - [x] MCP eksponerer mindst ét RAG-endpoint som tool
 - [x] Hermes Agent forbundet til MCP server
@@ -38,11 +38,11 @@ Installer og forbind systemet.
 Justér, test og skriv rapport.
 
 - [x] Skriv `hermes/system_prompt.md` + `AGENTS.md` — rolle, tool-strategi, sprog, tone *(eksaminationskrav)*
-- [ ] Skriv `hermes/skills/markplan.md` — 5-trins ræsonnerings-sekvens *(eksaminationskrav)*
-- [ ] Test systemet med reelle spørgsmål om companion planting
-- [ ] Test `markplan`-skill end-to-end: sæson + jord → struktureret anbefaling
+- [x] Skriv `hermes/skills/markplan.md` — 5-trins ræsonnerings-sekvens *(eksaminationskrav)*
+- [x] Test systemet med reelle spørgsmål om companion planting
+- [x] Test `markplan`-skill end-to-end: sæson + jord → struktureret anbefaling
 - [ ] Arkitekturdiagram færdigt
-- [ ] System kører stabilt end-to-end
+- [x] System kører stabilt end-to-end
 - [ ] Rapport — side 1: platform, arkitektur og modelreflection (inkl. Hermes vs. NanoClaw)
 - [ ] Rapport — side 2-3: implementering (inkl. system_prompt + markplan skill med forklaring)
 - [ ] Rapport — side 4: brug af agenten i casen
@@ -55,8 +55,8 @@ Justér, test og skriv rapport.
 Finpuds og aflever.
 
 - [ ] Rapport korrekturlæst og max 5 sider
-- [ ] CLAUDE.md opdateret og korrekt
-- [ ] Repo ryddet op — ingen credentials, README korrekt
+- [x] CLAUDE.md opdateret og korrekt
+- [x] Repo ryddet op — ingen credentials, README korrekt
 - [ ] System testet fra bunden (clean boot)
 - [ ] Afleveret
 
