@@ -31,8 +31,7 @@ Projektet bygger videre på et 2-ugers projekt fra AI Agenter og Automatisering,
 │   ├── workflow-a-del1-staging-generator.json   # Data pipeline (2-ugers projekt)
 │   ├── workflow-a-del2-neo4j-writer.json         # Data pipeline (2-ugers projekt)
 │   ├── workflow-b-vector-ingestion.json          # Data pipeline (2-ugers projekt)
-│   ├── workflow-c-agent.json                     # Erstattet af Workflow D
-│   ├── workflow-d-telegram-bridge.json           # Eksamensprojekt — Telegram → Hermes
+│   ├── workflow-c-agent.json                     # Erstattet af Hermes + gateway
 │   └── workflow-e-season-soil-filter.json        # Eksamensprojekt — webhook til MCP tool
 ├── mcp-server/                                   # Eksamensprojekt — eksponerer RAG som MCP tools
 ├── hermes/
@@ -66,8 +65,8 @@ Henter Wikipedia-tekst per plante, chunker (500 tegn, 50 tegns overlap) og gener
 
 ### Eksamensprojekt-workflows (nye)
 
-**Workflow D** — Telegram Bridge
-Modtager Telegram-beskeder, sender dem til Hermes via HTTP POST, returnerer svaret til Telegram. Erstatter Workflow C's Chat Trigger + AI Agent med en simpel routing til Hermes.
+**Telegram-interface** — Hermes built-in gateway
+Hermes Agent har en built-in Telegram gateway der kører som launchd service (`hermes gateway run`). Erstatter Workflow C's Chat Trigger + AI Agent direkte — ingen n8n-bridge nødvendig. Workflow D blev fravalgt fordi Hermes håndterer Telegram nativt med lavere kompleksitet.
 
 **Workflow E** — Season/Soil Filter (webhook)
 Webhook-workflow eksponeret som MCP tool. Modtager `season`, `soil_type`, `moisture` (dansk eller engelsk input), mapper til engelske Neo4j-værdier, og returnerer liste af egnede planter via dynamisk Cypher-query.
@@ -107,8 +106,8 @@ Webhook-workflow eksponeret som MCP tool. Modtager `season`, `soil_type`, `moist
 Telegram
    │
    ▼
-n8n Workflow D — Telegram Bridge
-   │  HTTP POST til Hermes API
+Hermes Gateway (launchd service)
+   │
    ▼
 Hermes Agent (gemini-2.5-flash via Google AI Studio)
    ├── AGENTS.md                  ← system prompt (læses automatisk fra CWD)
@@ -121,7 +120,7 @@ Hermes Agent (gemini-2.5-flash via Google AI Studio)
            └── season_soil_filter  ──► n8n Workflow E ──► Neo4j
 ```
 
-**n8n's rolle**: Telegram-interface (Workflow D) og kompleks domænetransformation eksponeret som MCP tool (Workflow E). Data-pipeline (A1, A2, B) kører ved ingestion.
+**n8n's rolle**: Kompleks domænetransformation eksponeret som MCP tool (Workflow E) og data-pipeline (A1, A2, B) ved ingestion. Telegram-interfacet håndteres af Hermes' built-in gateway.
 
 ## Hermes konfiguration
 
@@ -157,7 +156,7 @@ ollama pull llama3.1
 ollama pull nomic-embed-text
 
 # n8n — importer workflows fra /workflows/
-# Aktiver Workflow D (Telegram Bridge) og Workflow E (Season/Soil Filter webhook)
+# Aktiver Workflow E (Season/Soil Filter webhook)
 
 # MCP server
 cd mcp-server && npm install && npm start
@@ -178,7 +177,7 @@ Hermes config i `hermes/config.yaml` peger på:
 ## Eksamen
 
 **Format**: Mundtlig eksamen — systemet køres lokalt under præsentationen
-**Workflows der præsenteres**: A del 1, A del 2, B, D, E (+ MCP og Hermes)
+**Workflows der præsenteres**: A del 1, A del 2, B, E (+ MCP server og Hermes gateway)
 **Rapport**: Max 5 sider, afleveringsfrist 26. maj 2026
 **Datoer**: 4., 8. eller 10. juni 2026
 
