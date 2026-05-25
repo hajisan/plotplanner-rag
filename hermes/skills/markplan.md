@@ -1,3 +1,17 @@
+---
+name: markplan
+description: Lav en planteplan baseret på sæson og jordbundstype — sekvens med season_soil_filter, graph_query og vector_search
+version: 1.0.0
+author: PlotPlanner
+metadata:
+  hermes:
+    tags: [agriculture, planting, companion-planting, crop-rotation, markplan]
+requires_tools:
+  - mcp_plotplanner_season_soil_filter
+  - mcp_plotplanner_graph_query
+  - mcp_plotplanner_vector_search
+---
+
 # Markplan-skill
 
 Brug denne sekvens når brugeren beder om hjælp til at planlægge hvad der skal plantes — enten for en hel mark, et bed eller en sæson.
@@ -11,33 +25,30 @@ Aktiver ved formuleringer som:
 
 ## Sekvens
 
+Gennemfør alle fem trin før du skriver noget til brugeren. Stil ingen spørgsmål undervejs.
+
 **Trin 1 — Afklar betingelser**
 
-Spørg ind til sæson og jordbundstype hvis ikke givet. Stil ét spørgsmål ad gangen:
-- "Hvilken sæson planlægger du for — forår, sommer, efterår eller vinter?"
-- "Hvad er din jordbundstype — ler, sand, muld, kalk, tørv eller silt?"
-- Spørg kun om fugtighed (veldrænet/fugtig/våd) hvis brugeren nævner dræningsproblemer.
+Mangler sæson eller jordbundstype i brugerens besked, stil præcist ét spørgsmål og afvent svar. Har du begge oplysninger, gå direkte til trin 2.
 
-**Trin 2 — Filtrer kandidater**
+**Trin 2 — Filtrer kandidater (intern)**
 
-Kald `season_soil_filter` med de afklarede betingelser. Vis IKKE hele listen for brugeren — brug den internt til at indsnævre til 3-5 relevante kandidater. Prioritér grøntsager og urter der er praktiske for en andelsgård.
+Kald `mcp_plotplanner_season_soil_filter`. Brug resultatet internt — vis det ikke til brugeren. Vælg 3-5 kandidater, prioritér grøntsager og urter.
 
-**Trin 3 — Hent relationsdata**
+**Trin 3 — Hent relationsdata (intern)**
 
-Kald `graph_query` for de 3-5 udvalgte kandidater fra trin 2. Brug resultaterne til at identificere gode companion-kombinationer og sædskiftemuligheder.
+Kald `mcp_plotplanner_graph_query` for hver af de 3-5 kandidater. Brug resultaterne til at finde gode companion-kombinationer.
 
-**Trin 4 — Berig med dyrkningsdetaljer**
+**Trin 4 — Hent dyrkningsdetaljer (intern)**
 
-Kald `vector_search` med en søgetekst der matcher brugerens situation, f.eks. "dyrkningsforhold lerjord forår" eller "companion planting kål". Brug resultaterne til konkrete dyrkningsråd.
+Kald `mcp_plotplanner_vector_search` med en ENGELSK søgestreng.
+Eksempler: `"spring vegetable cultivation"` · `"clay soil crops"` · `"companion planting vegetables"`
 
-**Trin 5 — Præsenter anbefaling**
+**Trin 5 — Skriv anbefaling på dansk**
 
-Sammensæt en struktureret anbefaling:
-- 3-5 anbefalede planter med kort begrundelse
-- Mindst én companion-kombination der styrker hinanden
-- Sædskifteforslag hvis relevant
-- Ét konkret dyrkningsråd per plante fra vector_search
+Nu skriver du dit svar. Svar altid på dansk. Strukturér således:
+- 3-5 anbefalede planter med én sætnings begrundelse
+- Mindst én companion-kombination
+- Ét konkret dyrkningsråd per plante
 
-## Vigtig regel
-
-Følg sekvensen i rækkefølge. Spring ikke trin over. Vis ikke rådata fra tool-kald direkte — syntetisér dem til en læsbar anbefaling.
+Svar kort og handlingsorienteret — ingen lange forklaringer.
