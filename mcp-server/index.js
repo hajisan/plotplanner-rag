@@ -1,8 +1,10 @@
 import "dotenv/config";
 import { randomUUID } from "crypto";
 import express from "express";
+import cors from "cors";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
 import { graphQuery, graphQuerySchema } from "./tools/graph_query.js";
 import { seasonSoilFilter, seasonSoilFilterSchema } from "./tools/season_soil_filter.js";
@@ -32,6 +34,7 @@ function createServer() {
 const sessions = new Map();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.all("/mcp", async (req, res) => {
@@ -63,6 +66,26 @@ app.all("/mcp", async (req, res) => {
     return;
   }
   await transport.handleRequest(req, res, req.body);
+});
+
+const sseTransports = new Map();
+
+app.get("/sse", async (req, res) => {
+  const transport = new SSEServerTransport("/messages", res);
+  sseTransports.set(transport.sessionId, transport);
+  transport.onclose = () => sseTransports.delete(transport.sessionId);
+  const server = createServer();
+  await server.connect(transport);
+});
+
+app.post("/messages", async (req, res) => {
+  const sessionId = req.query.sessionId;
+  const transport = sseTransports.get(sessionId);
+  if (!transport) {
+    res.status(404).json({ error: "Session ikke fundet" });
+    return;
+  }
+  await transport.handlePostMessage(req, res, req.body);
 });
 
 const PORT = process.env.PORT || 3000;

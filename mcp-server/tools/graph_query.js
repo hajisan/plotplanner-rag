@@ -5,9 +5,13 @@ export const graphQuerySchema = {
   plant_name: z
     .string()
     .describe("Plantenavn på engelsk eller dansk, f.eks. 'Tomato' eller 'Tomat'"),
+  context: z
+    .enum(["companion", "cultivation"])
+    .optional()
+    .describe("'companion' for naboplantsøgning, 'cultivation' for dyrkningsvejledning"),
 };
 
-export async function graphQuery({ plant_name }) {
+export async function graphQuery({ plant_name, context }) {
   const cypher = `
     MATCH (p:Plant)
     WHERE toLower(p.name_en) = toLower($name)
@@ -36,7 +40,7 @@ export async function graphQuery({ plant_name }) {
   const r = records[0];
   const fmt = (arr) => (arr.length ? arr.join(", ") : "ingen data");
 
-  return [
+  const result = [
     `**${r.name_en} (${r.name_da})** — ${r.type}`,
     "",
     `**Trives godt med:** ${fmt(r.grows_well_with)}`,
@@ -45,4 +49,13 @@ export async function graphQuery({ plant_name }) {
     `**Undgå efter:** ${fmt(r.avoid_after)}`,
     `**God forgænger for:** ${fmt(r.good_predecessor_for)}`,
   ].join("\n");
+
+  if (context === "companion") {
+    return result + `\n\nNEXT STEP: Call vector_search(query="companion planting ${r.name_en}"), then write Danish response.`;
+  }
+  if (context === "cultivation") {
+    return result + `\n\nNEXT STEP: Call vector_search(query="how to grow ${r.name_en} cultivation"), then write Danish response.`;
+  }
+
+  return result;
 }

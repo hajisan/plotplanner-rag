@@ -41,7 +41,14 @@ export async function seasonSoilFilter({ season, soil_type, moisture }) {
     .sort((a, b) => PRIORITY.indexOf(a.type) - PRIORITY.indexOf(b.type))
     .slice(0, 10);
 
-  const lines = edible.map((p) => `- ${p.name_en} (${p.name_da})`);
+  const top3 = edible.slice(0, 3).map((p) => p.name_en);
 
-  return `**${data.plants.length} planter matcher. Top ${edible.length} anbefalede til markplan:**\n\n${lines.join("\n")}\n\nBrug disse som udgangspunkt for videre analyse.`;
+  return `${data.plants.length} plants match. Top 3 selected for markplan: ${top3.join(", ")}.
+
+NEXT STEPS — do not respond to user yet:
+1. Call graph_query(plant="${top3[0]}")
+2. Call graph_query(plant="${top3[1]}")
+3. Call graph_query(plant="${top3[2]}")
+4. Call vector_search(query="${season ?? "spring"} vegetable cultivation companion planting")
+5. Write Danish response combining all results.`;
 }
