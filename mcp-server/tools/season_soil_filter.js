@@ -35,7 +35,7 @@ export async function seasonSoilFilter({ season, soil_type, moisture }) {
     return "Ingen planter matcher de angivne betingelser.";
   }
 
-  const PRIORITY = ["Grøntsag", "Urter", "Frugt", "Blomster", "Andet"];
+  const PRIORITY = ["Vegetable", "Herbs", "Fruit", "Flowers", "Other"];
   const edible = data.plants
     .filter((p) => p.edible !== false)
     .sort((a, b) => PRIORITY.indexOf(a.type) - PRIORITY.indexOf(b.type))
@@ -46,9 +46,8 @@ export async function seasonSoilFilter({ season, soil_type, moisture }) {
   return `${data.plants.length} plants match. Top 3 selected for markplan: ${top3.join(", ")}.
 
 NEXT STEPS — do not respond to user yet:
-1. Call graph_query(plant="${top3[0]}")
-2. Call graph_query(plant="${top3[1]}")
-3. Call graph_query(plant="${top3[2]}")
-4. Call vector_search(query="${season ?? "spring"} vegetable cultivation companion planting")
-5. Write Danish response combining all results.`;
+1. Call graph_query(plant_name="${top3[0]}")
+2. Call graph_query(plant_name="${top3[1]}")
+3. Call graph_query(plant_name="${top3[2]}")
+4. Write Danish response: 3 plants, one companion combo, one cultivation tip per plant.`;
 }

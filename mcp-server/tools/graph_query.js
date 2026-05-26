@@ -51,10 +51,10 @@ export async function graphQuery({ plant_name, context }) {
   ].join("\n");
 
   if (context === "companion") {
-    return result + `\n\nNEXT STEP: Call vector_search(query="companion planting ${r.name_en}"), then write Danish response.`;
+    return result + `\n\nNEXT STEP — do not respond to user yet: Call vector_search(query="${r.name_en} grows well with beneficial neighbor plants"). Then write a Danish response listing: (1) companions from graph data above, (2) EVERY plant name mentioned in the vector search chunks as a potential companion or beneficial neighbor, (3) antagonists from graph data if any.`;
   }
   if (context === "cultivation") {
-    return result + `\n\nNEXT STEP: Call vector_search(query="how to grow ${r.name_en} cultivation"), then write Danish response.`;
+    return result + `\n\nNEXT STEP — do not respond to user yet: Call vector_search(query="how to grow ${r.name_en} cultivation"). Then write a Danish cultivation guide combining graph data (companions, rotation) with growing tips from vector search.`;
   }
 
   return result;

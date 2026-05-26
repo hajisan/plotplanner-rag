@@ -13,17 +13,17 @@ function createServer() {
   const server = new McpServer({ name: "plotplanner", version: "1.0.0" });
 
   server.tool("vector_search",
-    "Semantisk søgning i plantedata. Brug til åbne spørgsmål om dyrkningsforhold, egenskaber og teknikker.",
+    "Semantisk søgning i plantedata. Brug KUN til åbne spørgsmål UDEN navngivet plante, eller som næste skridt efter graph_query.",
     vectorSearchSchema,
     async (args) => ({ content: [{ type: "text", text: await vectorSearch(args) }] })
   );
   server.tool("graph_query",
-    "Henter companion planting-relationer og sædskifte for én specifik plante fra grafdatabasen.",
+    "PRIMÆRT VALG for companion og dyrkning. Kald dette tool FØRST når brugeren nævner en specifik plante — hvad trives godt med X, hvad hæmmer X, hvordan dyrker jeg X. Brug context='companion' eller context='cultivation'.",
     graphQuerySchema,
     async (args) => ({ content: [{ type: "text", text: await graphQuery(args) }] })
   );
   server.tool("season_soil_filter",
-    "Filtrerer planter på sæson, jordbundstype og fugtighed. Understøtter dansk og engelsk input. Returnerer liste af egnede planter.",
+    "PRIMÆRT VALG for markplaner. Kald dette tool FØRST når brugeren nævner sæson og/eller jordbundstype.",
     seasonSoilFilterSchema,
     async (args) => ({ content: [{ type: "text", text: await seasonSoilFilter(args) }] })
   );
