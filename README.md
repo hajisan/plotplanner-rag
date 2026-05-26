@@ -63,10 +63,15 @@ Hermes Agent  ←── AGENTS.md (system prompt + markplan-sekvens)
 │   ├── system_prompt.md                          # Kopi af AGENTS.md til dokumentation
 │   └── skills/
 │       └── markplan.md                           # Markplan-sekvens skill
+├── dashboard/                                    # Live service-status og event feed
 ├── data/
 │   └── staging_plants_v2.json
 ├── docs/
-│   └── rapport.md
+│   ├── arkitektur.md                             # Systemarkitektur med Mermaid-diagrammer
+│   ├── eksamen-noter.md                          # Demo-spørgsmål og refleksioner
+│   ├── rapport-noter.md                          # Løbende noter til rapport-skrivning
+│   └── rapport.docx
+├── start.sh                                      # Starter alle services (alias: plotplannerstart)
 └── screenshots/
 ```
 

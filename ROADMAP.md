@@ -61,6 +61,10 @@ Justér, test og skriv rapport.
 - [x] `season_soil_filter` begrænset til top 10 spiselige planter — forhindrer at agenten viser lang liste
 - [x] AGENTS.md markplan-sekvens strammet — forbyder kommunikation før trin 5
 - [x] `docs/eksamen-noter.md` oprettet med demo-spørgsmål og refleksioner
+- [x] Tool-routing repareret — dyrkning via `graph_query(context="cultivation")`, ikke vector_search
+- [x] NEXT STEP-instruktioner i tool-resultater ("do not respond yet") erstatter AGENTS.md multi-trin-logik
+- [x] Tool-beskrivelser i `mcp-server/index.js` opdateret til at guide LLM-tool-valg direkte
+- [x] `graph_query` NEXT STEP specificerer at begge datakilder (graph + vector) bruges i svar
 
 ---
 

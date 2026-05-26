@@ -18,22 +18,21 @@ Hermes Agent (Nous Research) er valgt frem for NanoClaw af to primære grunde:
 
 *[Tilføj: hvad undersøgte du om NanoClaw, og hvad var den konkrete forskel?]*
 
-### Valg af LLM: Llama 3.1
+### Valg af LLM: gemini-2.5-flash
 
-Llama 3.1 bruges som agent-LLM. Valgt fordi:
-- Tool calling-understøttelse, som er nødvendig for at Hermes kan kalde MCP tools
-- Kører lokalt via Ollama uden GPU-krav der er urealistiske på dev-maskine
-- Stærk generel forståelse af domænetekster på trods af 8B parameterstørrelse
+Gemini 2.5 Flash via Google AI Studio er den endelige agent-LLM.
 
-Mistral 7B bruges til staging-generering (Workflow A del 1) frem for Llama 3.1, fordi opgaven er tekstgenerering og berigelse — ikke tool calling. Mistral er hurtigere og tilstrækkelig til den opgave.
+Llama 3.1 testedes først — hallucinererede og kaldte ikke MCP tools pålideligt i Hermes' protokol. 8B parametre er for lidt til pålidelig tool-calling med multi-trin ræsonnering. Gemini 2.5 Flash kalder `graph_query` korrekt og svarer konsistent på dansk.
 
-*[Tilføj: eventuelt observation fra test — hvordan klarede Llama 3.1 sig med tool-valg i praksis?]*
+Google AI Studio gratis tier holdt ikke til demo (rate limits). Billing aktiveret med cap på 50 kr — omkostning per session er ubetydelig ved den fraktion af forespørgsler.
+
+Mistral 7B bruges stadig til staging-generering (Workflow A del 1) — opgaven er tekstgenerering og berigelse, ikke tool calling. Mistral er hurtigere og tilstrækkelig til den opgave.
 
 ### Arkitektur-overblik
 
 Systemet er opdelt i tre lag:
 
-**Interface-lag** (n8n Workflow D): Modtager Telegram-beskeder og router til Hermes. n8n er valgt til dette lag fordi det håndterer Telegram-protokollen og giver visuel kontrol over message flow uden at det kræver kode.
+**Interface-lag** (Hermes built-in gateway): Hermes Agent (Nous Research) har en built-in Telegram gateway der kører som launchd service. Den håndterer Telegram-protokollen nativt — ingen n8n-bridge nødvendig. n8n Workflow D (Telegram Bridge) var planlagt men blev fravalgt da Hermes' gateway løste problemet med lavere kompleksitet.
 
 **Agent-lag** (Hermes + MCP): Hermes fortolker brugerens intent og vælger tools. MCP-serveren eksponerer tre tools som Hermes kan kalde. Adskillelsen af agent og tools via MCP betyder at tools kan testes og udskiftes uafhængigt af agenten.
 
@@ -75,11 +74,23 @@ Workflow A del 1 genererer `staging_plants.json` med LLM-berigede felter (navne,
 
 n8n bruges til to distinkte formål i det samlede system:
 
-**Workflow D — Telegram Bridge**: Modtager beskeder fra Telegram via webhook, sender dem til Hermes' API, og returnerer Hermes' svar til Telegram. n8n håndterer Telegram-protokollen og giver visuel kontrol over message routing.
+**Data-pipeline (Workflows A1, A2, B)**: Staging JSON-generering, Neo4j-skrivning og vector ingestion. Disse workflows er fra 2-ugers projektet og er uændrede.
 
 **Workflow E — Season/Soil Filter**: Et webhook-workflow eksponeret som MCP tool. Modtager `season`, `soil_type` og `moisture` som parametre (med understøttelse af dansk input via et mapping-trin), genererer en dynamisk Cypher-query og returnerer egnede planter fra Neo4j.
 
 Workflow E lever i n8n frem for direkte i MCP-serveren fordi mapping-logikken (dansk → engelsk, f.eks. "forår" → "spring", "lerjord" → "clay") er naturlig at vedligeholde i en visuel workflow. Det er nemt at udvide mappingen uden at ændre MCP-serverens kode.
+
+### Kravdækning
+
+| Krav | Dækkes af |
+|------|-----------|
+| Meningsfuld brug af MCP | MCP server med 3 tools |
+| Meningsfuld brug af n8n | Workflow E (webhook) + data-pipeline (A1, A2, B) |
+| Neo4j vector RAG | `vector_search` tool |
+| Neo4j graph RAG | `graph_query` tool |
+| Eksponere n8n workflow via MCP | Workflow E eksponeres som `season_soil_filter` |
+| Brugerinteraktion via Telegram | Hermes built-in gateway |
+| Studenteroprettet prompt/skill | AGENTS.md + `skills/markplan.md` |
 
 ### MCP smoke test — alle tre tools verificeret
 
@@ -97,39 +108,72 @@ Hermes Agent bruger gemini-2.5-flash via Google AI Studio (gratis tier). llama3.
 
 Systemprompten er i `AGENTS.md` i projektroden — Hermes indlæser dette automatisk fra arbejdsmappen. Instruktionerne specificerer hvornår hvert tool bruges og at svar altid skal være på dansk.
 
-### Custom system prompt (`hermes/system_prompt.md`)
+### Custom system prompt (`hermes/system_prompt.md` / `AGENTS.md`)
 
-*[Udfyld når system_prompt.md er skrevet — beskriv de konkrete valg: hvilke instruktioner er med, og hvorfor. Hvad forsøgte du og hvad virkede ikke?]*
+System prompten definerer agentens rolle og routing-strategi. `AGENTS.md` i projektroden indlæses automatisk af Hermes fra CWD; `hermes/system_prompt.md` er en identisk kopi til dokumentation.
 
-Designprincipper der guides af:
-- Eksplicit tool-strategi: agenten instrueres i *hvornår* hvert tool er relevant frem for at lade den gætte
-- Dansk kommunikation: agenten kommunikerer altid på dansk selvom kildedataen er på engelsk
-- Kortfattethed: handlingsorienterede svar frem for lange forklaringer
+Routing-tabel (centrale instruktioner):
+- Companion-spørgsmål → `graph_query(context="companion")` → NEXT STEP → `vector_search`
+- Dyrkning → `graph_query(context="cultivation")` → NEXT STEP → `vector_search`
+- Markplan/sæson+jord → `season_soil_filter` → NEXT STEPS → `graph_query` × 3
+- Åbne spørgsmål → `vector_search`
+
+Vigtigste designlæring: kortere, direktive instruktioner virker bedre end lange forklaringer. AGENTS.md-instruktioner kan overrides af Geminis base model training — sekvenslogikken er derfor embeddet direkte i tool-resultater som `NEXT STEP — do not respond to user yet`, ikke udelukkende i system prompt.
+
+Tool-beskrivelserne i `mcp-server/index.js` bruges aktivt af LLM'en til tool-valg — `graph_query` er markeret som "PRIMÆRT VALG" for companion/dyrkning, `season_soil_filter` for markplaner.
 
 ### Custom skill: `markplan` (`hermes/skills/markplan.md`)
 
-*[Udfyld når markplan.md er skrevet og testet — beskriv den konkrete sekvens og hvad der begrundede rækkefølgen]*
+Skillen er bibeholdt som eksaminationskrav (studenteroprettet skill). Den definerer en intenderet ræsonnerings-sekvens til markplanlægning, men i praksis styres sekvensen primært af `season_soil_filter`'s NEXT STEPS output — tool-resultater er mere autoritative end skill-instruktioner for multi-trin flows med Gemini.
 
-Skillen definerer en fast ræsonnerings-sekvens til markplanlægning:
-1. Afklar sæson og jordbundstype (spørg ind hvis ikke givet)
-2. Kald `season_soil_filter` — find egnede planter til betingelserne
+Intenderet sekvens:
+1. Afklar sæson og jordbundstype
+2. Kald `season_soil_filter` — filtrer kandidatmængden
 3. Kald `graph_query` for top-kandidater — hent companions og sædskifte
 4. Kald `vector_search` — berig med dyrkningsbeskrivelser
-5. Syntetiser — præsenter struktureret anbefaling med begrundelse
+5. Syntetiser — præsenter struktureret anbefaling
 
-Rækkefølgen er valgt fordi filtrering på betingelser (trin 2) indsnævrer kandidatmængden inden de dyrere graph- og vector-kald (trin 3-4). Det er en bevidst optimering.
+Skill og tool-resultater supplerer hinanden: skillen definerer intentionen og giver eksamensrelevant forklaring af ræsonnementet; NEXT STEPS i tool-resultater håndhæver rækkefølgen under kørsel.
 
 ---
 
 ## Side 4 — Brug af agenten i casen
 
-*[Udfyld med konkrete eksempler fra test — 2-3 brugerinteraktioner der viser systemet i brug]*
+Tre repræsentative brugerinteraktioner der demonstrerer systemets tre flows:
 
-*Forslag til hvad der skal med:*
-- *Et eksempel med `vector_search`: åbent spørgsmål om en plante*
-- *Et eksempel med `graph_query`: "hvad trives godt sammen med tomater?"*
-- *Et eksempel med `markplan`-skill: "hvad kan jeg plante i foråret på lerjord?"*
-- *Evt. et eksempel hvor agenten kombinerer to tools*
+### Eksempel 1: Companion planting
+
+**Bruger:** "hvad trives godt med tomater?"
+
+**Tool-kald:** `graph_query(plant_name="tomato", context="companion")` → `vector_search(query="tomato grows well with beneficial neighbor plants")`
+
+**Svar (dansk):** Tomater trives godt med broccoli (Neo4j graph). Derudover nævner dyrkningslitteraturen radise, salat og løgplanter (Alliums) som gavnlige naboplanter. Tomater er gode forgængere for passionsfrugt, agurk og californisk valmue.
+
+**Observation:** Neo4j har kun broccoli som companion for tomat. `vector_search` supplerer med Wikipedia-baserede companions. Begge datakilder kombineres i svaret.
+
+---
+
+### Eksempel 2: Dyrkningsvejledning
+
+**Bruger:** "hvordan dyrker jeg kål?"
+
+**Tool-kald:** `graph_query(plant_name="cabbage", context="cultivation")` → `vector_search(query="how to grow cabbage cultivation")`
+
+**Svar (dansk):** Kål (Brassica oleracea) er en toårig plante dyrket som etårig. Trives i køligere vejr med god sol. Gode naboer: bønner, selleri, bælgfrugter. Undgå vindruer. Sæskifte: følger godt efter bønner, ærter, majs, squash; undgå efter tomater, peberfrugter, salat.
+
+**Observation:** Graph-data giver companions/rotation, vector-data giver dyrkningsforhold. Agenten spørger ikke "hvilken type kål?" — den klikker direkte til graph_query.
+
+---
+
+### Eksempel 3: Markplan
+
+**Bruger:** "lav en markplan til forår med lerjord"
+
+**Tool-kald:** `season_soil_filter(season="forår", soil_type="lerjord")` → `graph_query(plant_name="asparagus")` → `graph_query(plant_name="bush beans")` → `graph_query(plant_name="fava beans")`
+
+**Svar (dansk):** Forår med lerjord: (1) Asparges — trives med tomater og persille. (2) Buskbønner — trives med jordbær og agurker. (3) Hestebønner — følger godt efter tomater, majs, squash.
+
+**Observation:** `season_soil_filter`'s PRIORITY-array (`["Vegetable", "Herbs", ...]`) sikrer at grøntsager vælges. NEXT STEPS i tool-resultatet styrer de efterfølgende `graph_query`-kald automatisk.
 
 ---
 

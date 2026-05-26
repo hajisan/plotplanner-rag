@@ -128,18 +128,16 @@ Hermes Agent (gemini-2.5-flash via Google AI Studio)
 
 **AGENTS.md** (projektroden) — Hermes indlæser automatisk fra arbejdsmappen (CWD). Definerer agentens rolle, tool-strategi og tone:
 - Rolle: erfaren markplanlægger til regenerativt landbrug
-- Eksplicit tool-strategi: hvornår bruges `vector_search` vs `graph_query` vs `season_soil_filter`
-- Kombinerer tools ved komplekse spørgsmål
+- Routing-tabel: companion/dyrkning → `graph_query` med `context`-parameter, markplan → `season_soil_filter`, åbent → `vector_search`
 - Kommunikerer altid på dansk
 
-**hermes/system_prompt.md** — Identisk kopi til dokumentation og eksaminationsreference.
+**hermes/system_prompt.md** — Identisk kopi til dokumentation og eksaminationsreference. Sync med: `cp AGENTS.md hermes/system_prompt.md`
 
-**skills/markplan.md** — Fast ræsonnerings-sekvens til markplaner:
-1. Afklar sæson og jordbundstype
-2. Kald `season_soil_filter`
-3. Kald `graph_query` for top-kandidater
-4. Kald `vector_search` for dyrkningsbeskrivelser
-5. Syntetiser og præsenter anbefaling
+**skills/markplan.md** — Fast ræsonnerings-sekvens til markplaner (eksaminationskrav). I praksis styres sekvensen af NEXT STEPS i tool-resultater.
+
+**Tool-beskrivelser i `mcp-server/index.js`** — bruges aktivt af LLM'en til tool-valg. `graph_query` er markeret som "PRIMÆRT VALG" for companion/dyrkning, `season_soil_filter` for markplaner. Disse beskrivelser er del af tool-schema og er mere pålidelige end AGENTS.md-routing for Gemini.
+
+**NEXT STEP-instruktioner i tool-resultater** — primær mekanisme til multi-trin flows. Mønsteret `NEXT STEP — do not respond to user yet: Call X, then write Danish response` er mere autoritativt end system prompt-instruktioner fordi tool-resultater er direkte i LLM'ens kontekstvindue.
 
 **Hermes config** lever i `~/.hermes/config.yaml` (ikke i repo). `hermes/config.yaml` i projektet er dokumentation af de valgte indstillinger.
 

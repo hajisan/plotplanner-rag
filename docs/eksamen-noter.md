@@ -6,10 +6,10 @@ Brug disse konkrete spørgsmål under eksamen — de er testet og rammer de rigt
 
 | Spørgsmål | Tool |
 |-----------|------|
-| "hvad trives godt med tomater?" | `graph_query` |
-| "hvad kræver kål af jordbund?" | `vector_search` |
-| "hvad kan jeg plante om foråret på lerjord?" | `season_soil_filter` |
-| "lav en markplan til foråret med sandjord" | fuld 5-trins sekvens |
+| "hvad trives godt med tomater?" | `graph_query(companion)` → `vector_search` |
+| "hvordan dyrker jeg kål?" | `graph_query(cultivation)` → `vector_search` |
+| "hvad kan jeg plante om foråret på lerjord?" | `season_soil_filter` → `graph_query` × 3 |
+| "lav en markplan til foråret med sandjord" | `season_soil_filter` → `graph_query` × 3 |
 
 ---
 
@@ -43,8 +43,18 @@ Tool-output design er en del af prompt engineering. Et tool der returnerer for m
 
 ---
 
+## Refleksion: Tool-result-driven sequencing
+
+AGENTS.md-instruktioner kan overrides af Geminis base model training ved multi-trin flows. Løsning: sekvenslogikken embeddes i tool-resultater som `NEXT STEP — do not respond to user yet: ...`. Tool-resultater er autoritativ LLM-kontekst — de er direkte i kontekstvinduet og overskygges ikke af base model priors.
+
+**Konsekvens til eksamen:** tools styrer sig selv. Det er en arkitekturisk beslutning, ikke en bug-fix. Systemets robusthed afhænger af tool-output design, ikke kun system prompt.
+
+---
+
 ## Kendte quirks under demo
 
 - Agenten viser intern "tænkning" mellem tool-kald ("Now, Peas:...") — det er Gemini-adfærd der ikke kan slås fra, men illustrerer agentic reasoning
 - Lange markplan-svar splittes i to Telegram-beskeder (Telegrams beskedgrænse)
 - Hermes sessions skal ryddes manuelt (`~/.hermes/sessions/`) hvis gateway skifter arbejdsmappe
+- Agenten kalder somme tider `graph_query` × 5 i stedet for × 3 — det er fint, giver rigere svar
+- Databasedækning er ujævn — tomat har kun broccoli som companion i Neo4j. `vector_search` supplerer med Wikipedia-baserede companions.

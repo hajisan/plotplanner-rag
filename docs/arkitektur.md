@@ -109,7 +109,9 @@ graph LR
 
 | Spørgsmål | Tool | Eksempel |
 |-----------|------|---------|
-| Specifik plante | `graph_query` | "hvad trives godt med tomater?" |
-| Åbent dyrkningsspørgsmål | `vector_search` | "hvad kræver kål af jordbund?" |
-| Hvad kan jeg plante | `season_soil_filter` | "hvad egner sig til lerjord om foråret?" |
-| Markplan | Alle tre i sekvens | `season_soil_filter` → `graph_query` × 3-5 → `vector_search` |
+| Companion / hvad trives godt med X? | `graph_query(context="companion")` → `vector_search` | "hvad trives godt med tomater?" |
+| Dyrkning / hvordan dyrker jeg X? | `graph_query(context="cultivation")` → `vector_search` | "hvordan dyrker jeg kål?" |
+| Hvad kan jeg plante / markplan | `season_soil_filter` → `graph_query` × 3 | "hvad kan jeg plante i foråret på lerjord?" |
+| Åbent spørgsmål uden plante | `vector_search` | "hvad er godt jordforbedrende?" |
+
+Sekvenslogikken er embeddet i tool-resultater via `NEXT STEP — do not respond to user yet`-instruktioner, ikke i AGENTS.md. Tool-resultater er mere autoritative LLM-kontekst end system prompt-instruktioner.
