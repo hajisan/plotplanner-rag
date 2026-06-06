@@ -2,15 +2,22 @@ import { z } from "zod";
 import { embed } from "../lib/ollama.js";
 import { runQuery } from "../lib/neo4j.js";
 
+// Kontrakten — definerer hvilke parametre toolet accepterer.
+// Bruges af index.js når toolet registreres, og af LLM'en til at vide hvad den må sende ind.
 export const vectorSearchSchema = {
   query: z.string().describe("Søgetekst ALTID på engelsk"),
+  // Returnerer max 10 chunks, min 1, default 5
   limit: z.number().int().min(1).max(10).default(5).optional(),
   plant: z.string().optional().describe("Plantenavn på engelsk — bruges til graph_query-opfølgning i cultivation-flow"),
 };
 
+// Åben semantisk søgning — bruges til spørgsmål uden en specifik navngivet plante.
+// Konverterer søgeteksten til 768 tal via Ollama, og finder de tekst-chunks i Neo4j der ligner mest.
 export async function vectorSearch({ query, limit = 5, plant }) {
+  // Konvertér søgetekst til embedding så den kan sammenlignes med chunks i Neo4j
   const embedding = await embed(query);
 
+  // Søg i Neo4j vector index — score >= 0.7 er sweetspottet mellem præcision og bredde
   const cypher = `
     CALL db.index.vector.queryNodes('plant_chunks', $limit, $embedding)
     YIELD node AS chunk, score
@@ -36,6 +43,8 @@ export async function vectorSearch({ query, limit = 5, plant }) {
     )
     .join("\n\n---\n\n");
 
+  // Hvis plant er angivet, styrer vi LLM'en til at kalde graph_query som næste skridt.
+  // NEXT STEP i tool-resultatet er mere autoritativt end AGENTS.md fordi det er direkte i LLM'ens kontekstvindue.
   if (plant) {
     return result + `\n\nNEXT STEP: Call graph_query(plant_name="${plant}") for companion context, then write Danish response.`;
   }
