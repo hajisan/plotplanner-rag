@@ -1,6 +1,11 @@
-import { z } from "zod";
-import { runQuery } from "../lib/neo4j.js";
+// graph_query — henter strukturerede relationer for én navngiven plante fra Neo4j-grafen.
+// Bruges når brugeren nævner en specifik plante — companion planting eller dyrkningsvejledning.
 
+import { z } from "zod";
+import { runQuery } from "../lib/neo4j.js"; // Kører Cypher-forespørgsler mod Neo4j
+
+// Kontrakten — definerer hvilke parametre toolet accepterer.
+// context styrer hvilket NEXT STEP der returneres og dermed hvilket tool agenten kalder bagefter.
 export const graphQuerySchema = {
   plant_name: z
     .string()
@@ -12,6 +17,9 @@ export const graphQuerySchema = {
 };
 
 export async function graphQuery({ plant_name, context }) {
+  // toLower() på begge sider sikrer case-insensitiv matching — databasen gemmer navne med stort
+  // begyndelsesbogstav (fx "Tomato"), men brugeren kan skrive hvad som helst (fx "tomAt").
+  // OPTIONAL MATCH bruges så planter uden en given relation stadig returneres — MATCH ville fejle.
   const cypher = `
     MATCH (p:Plant)
     WHERE toLower(p.name_en) = toLower($name)
@@ -38,6 +46,7 @@ export async function graphQuery({ plant_name, context }) {
   }
 
   const r = records[0];
+  // Formaterer arrays til læsbar streng — tomme arrays fra OPTIONAL MATCH vises som "ingen data"
   const fmt = (arr) => (arr.length ? arr.join(", ") : "ingen data");
 
   const result = [
@@ -50,6 +59,8 @@ export async function graphQuery({ plant_name, context }) {
     `**God forgænger for:** ${fmt(r.good_predecessor_for)}`,
   ].join("\n");
 
+  // NEXT STEP styrer agentens næste tool-kald direkte fra tool-resultatet —
+  // mere autoritativt end AGENTS.md fordi det er direkte i LLM'ens kontekstvindue.
   if (context === "companion") {
     return result + `\n\nNEXT STEP — do not respond to user yet: Call vector_search(query="${r.name_en} grows well with beneficial neighbor plants"). Then write a Danish response listing: (1) companions from graph data above, (2) EVERY plant name mentioned in the vector search chunks as a potential companion or beneficial neighbor, (3) antagonists from graph data if any.`;
   }
