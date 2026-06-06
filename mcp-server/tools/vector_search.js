@@ -9,7 +9,6 @@ import { runQuery } from "../lib/neo4j.js";      // Kører Cypher-forespørgsler
 // Bruges af index.js når toolet registreres, og af LLM'en til at vide hvad den må sende ind.
 export const vectorSearchSchema = {
   query: z.string().describe("Søgetekst ALTID på engelsk"),
-  // Returnerer max 10 chunks, min 1, default 5
   limit: z.number().int().min(1).max(10).default(5).optional(),
   plant: z.string().optional().describe("Plantenavn på engelsk — bruges til graph_query-opfølgning i cultivation-flow"),
 };
