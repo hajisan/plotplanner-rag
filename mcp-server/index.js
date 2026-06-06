@@ -1,3 +1,4 @@
+// MCP-serverens indgang — registrerer tools og eksponerer dem over HTTP
 import "dotenv/config";
 import { randomUUID } from "crypto";
 import express from "express";
@@ -9,6 +10,8 @@ import { vectorSearch, vectorSearchSchema } from "./tools/vector_search.js";
 import { graphQuery, graphQuerySchema } from "./tools/graph_query.js";
 import { seasonSoilFilter, seasonSoilFilterSchema } from "./tools/season_soil_filter.js";
 
+// Kaldes én gang per ny forbindelse — ikke globalt — så klienter ikke deler tilstand.
+// Tool-beskrivelserne herinde bruges aktivt af LLM'en til at beslutte hvilket tool den kalder.
 function createServer() {
   const server = new McpServer({ name: "plotplanner", version: "1.0.0" });
 
@@ -31,12 +34,16 @@ function createServer() {
   return server;
 }
 
+// Holder styr på aktive Streamable HTTP-sessioner — én entry per forbundet klient
 const sessions = new Map();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Streamable HTTP-transport — nyeste MCP-protokol, brugt af moderne klienter.
+// Første kald uden session-ID opretter en ny session; efterfølgende kald medsender ID'et
+// så serveren kan finde den rigtige forbindelse i sessions-Map'en.
 app.all("/mcp", async (req, res) => {
   if (!req.headers.accept?.includes("text/event-stream")) {
     req.headers.accept = "application/json, text/event-stream";
@@ -68,8 +75,12 @@ app.all("/mcp", async (req, res) => {
   await transport.handleRequest(req, res, req.body);
 });
 
+// Holder styr på aktive SSE-sessioner
 const sseTransports = new Map();
 
+// SSE-transport — ældre MCP-protokol, bruges af Hermes.
+// Bruger to separate endpoints: /sse åbner en lyttekanal (server → klient),
+// og /messages modtager klientens beskeder (klient → server).
 app.get("/sse", async (req, res) => {
   const transport = new SSEServerTransport("/messages", res);
   sseTransports.set(transport.sessionId, transport);
