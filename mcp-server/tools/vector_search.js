@@ -1,6 +1,9 @@
-import { z } from "zod";
-import { embed } from "../lib/ollama.js";
-import { runQuery } from "../lib/neo4j.js";
+// vector_search — semantisk søgning i tekst-chunks fra Wikipedia om planter.
+// Bruges til åbne spørgsmål uden en specifik navngivet plante, fx "hvad er companion planting?".
+
+import { z } from "zod";                        // Schema-validering af tool-parametre
+import { embed } from "../lib/ollama.js";        // Konverterer søgetekst til 768-dim embedding
+import { runQuery } from "../lib/neo4j.js";      // Kører Cypher-forespørgsler mod Neo4j
 
 // Kontrakten — definerer hvilke parametre toolet accepterer.
 // Bruges af index.js når toolet registreres, og af LLM'en til at vide hvad den må sende ind.
