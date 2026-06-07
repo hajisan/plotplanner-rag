@@ -58,6 +58,19 @@ else
   ok "Neo4j klar"
 fi
 
+# ── Ollama ────────────────────────────────────────────────────────────────────
+if port_open 11434; then
+  ok "Ollama kører allerede (port 11434)"
+else
+  info "Starter Ollama..."
+  ollama serve > "$LOG_DIR/ollama.log" 2>&1 &
+  echo "$! Ollama" >> "$PID_FILE"
+  printf "  Venter på Ollama"
+  until port_open 11434; do printf '.'; sleep 1; done
+  echo ""
+  ok "Ollama klar"
+fi
+
 # ── n8n ───────────────────────────────────────────────────────────────────────
 if port_open 5678; then
   ok "n8n kører allerede (port 5678)"
@@ -65,6 +78,10 @@ else
   info "Starter n8n..."
   bash ~/scripts/n8n-launcher/start.sh > "$LOG_DIR/n8n.log" 2>&1 &
   echo "$! n8n" >> "$PID_FILE"
+  printf "  Venter på n8n"
+  until port_open 5678; do printf '.'; sleep 2; done
+  echo ""
+  ok "n8n klar"
 fi
 
 # ── MCP server ────────────────────────────────────────────────────────────────
@@ -74,6 +91,10 @@ else
   info "Starter MCP server..."
   (cd "$SCRIPT_DIR/mcp-server" && node index.js) > "$LOG_DIR/mcp.log" 2>&1 &
   echo "$! MCP-server" >> "$PID_FILE"
+  printf "  Venter på MCP server"
+  until port_open 3000; do printf '.'; sleep 1; done
+  echo ""
+  ok "MCP server klar"
 fi
 
 # ── Dashboard ─────────────────────────────────────────────────────────────────
@@ -102,10 +123,11 @@ echo ""
 echo ""
 
 echo "Status:"
-port_open 7687 && ok "Neo4j          localhost:7687" || err "Neo4j          ikke klar — start database i Neo4j Desktop"
-port_open 5678 && ok "n8n            localhost:5678" || err "n8n            ikke tilgængelig (se logs/n8n.log)"
-port_open 3000 && ok "MCP server     localhost:3000" || err "MCP server     ikke tilgængelig (se logs/mcp.log)"
-port_open 3001 && ok "Dashboard      localhost:3001" || err "Dashboard      ikke tilgængelig (se logs/dashboard.log)"
+port_open 7687  && ok "Neo4j          localhost:7687" || err "Neo4j          ikke klar — start database i Neo4j Desktop"
+port_open 11434 && ok "Ollama         localhost:11434" || err "Ollama         ikke tilgængelig (se logs/ollama.log)"
+port_open 5678  && ok "n8n            localhost:5678" || err "n8n            ikke tilgængelig (se logs/n8n.log)"
+port_open 3000  && ok "MCP server     localhost:3000" || err "MCP server     ikke tilgængelig (se logs/mcp.log)"
+port_open 3001  && ok "Dashboard      localhost:3001" || err "Dashboard      ikke tilgængelig (se logs/dashboard.log)"
 pgrep -f "hermes" > /dev/null 2>&1 && ok "Hermes gateway kørende" || err "Hermes gateway ikke fundet (se logs/hermes.log)"
 
 echo ""
