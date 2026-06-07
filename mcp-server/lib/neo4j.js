@@ -22,4 +22,13 @@ export async function runQuery(cypher, params = {}) {
   }
 }
 
+// Verificér forbindelsen ved serverstart — fejler højt og tidligt frem for først ved første tool-kald
+try {
+  await driver.getServerInfo();
+  console.log("Neo4j forbindelse OK");
+} catch (err) {
+  console.error("Neo4j forbindelse fejlede ved serverstart:", err.message);
+  process.exit(1);
+}
+
 export default driver;
