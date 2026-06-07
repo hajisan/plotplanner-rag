@@ -1,17 +1,26 @@
-llm:
-  provider: google
-  model: gemini-2.5-flash
-  # API key konfigureres i ~/.hermes/config.yaml — ikke i repo
+# Dokumentation af projektets Hermes-konfiguration.
+# Den rigtige config lever i ~/.hermes/config.yaml og læses af Hermes ved opstart.
+# API-nøgler og personlige indstillinger er ikke inkluderet her.
 
-mcp:
-  servers:
-    - name: plotplanner
-      url: http://localhost:3000/mcp
+# LLM — gemini-2.5-flash via Google AI Studio (gratis tier)
+model:
+  default: gemini-2.5-flash
+  provider: gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
 
-system_prompt: hermes/system_prompt.md
-skills_dir: hermes/skills/
+# Agent-indstillinger
+agent:
+  system_prompt: hermes/system_prompt.md  # absolut sti i den rigtige config
+  reasoning_effort: medium
+  max_turns: 60
 
-database:
-  url: bolt://localhost:7687
-  user: neo4j
-  password: "${NEO4J_PASSWORD}"
+# MCP-server — Hermes forbinder via Streamable HTTP (/mcp), ikke SSE
+mcp_servers:
+  plotplanner:
+    url: http://localhost:3000/mcp
+    enabled: true
+
+# Telegram-gateway — Hermes håndterer Telegram nativt
+telegram:
+  reactions: false
+  allowed_chats: ''
