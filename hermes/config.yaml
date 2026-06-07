@@ -2,7 +2,7 @@
 # Den rigtige config lever i ~/.hermes/config.yaml og læses af Hermes ved opstart.
 # API-nøgler og personlige indstillinger er ikke inkluderet her.
 
-# LLM — gemini-2.5-flash via Google AI Studio (gratis tier)
+# LLM — gemini-2.5-flash via Google AI Studio (Tier 1 Pay-as-you-go)
 # ~/.hermes/config.yaml linje 1-4
 model:
   default: gemini-2.5-flash          # model der bruges til alle kald
