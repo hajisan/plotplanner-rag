@@ -82,6 +82,7 @@ else
   until port_open 5678; do printf '.'; sleep 2; done
   echo ""
   ok "n8n klar"
+  open "http://localhost:5678" 2>/dev/null || true
 fi
 
 # ── MCP server ────────────────────────────────────────────────────────────────
