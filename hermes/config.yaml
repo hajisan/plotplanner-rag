@@ -3,24 +3,28 @@
 # API-nøgler og personlige indstillinger er ikke inkluderet her.
 
 # LLM — gemini-2.5-flash via Google AI Studio (gratis tier)
+# ~/.hermes/config.yaml linje 1-4
 model:
   default: gemini-2.5-flash
   provider: gemini
   base_url: https://generativelanguage.googleapis.com/v1beta
 
 # Agent-indstillinger
+# ~/.hermes/config.yaml linje 10-24
 agent:
   system_prompt: hermes/system_prompt.md  # absolut sti i den rigtige config
   reasoning_effort: medium
   max_turns: 60
 
 # MCP-server — Hermes forbinder via Streamable HTTP (/mcp), ikke SSE
+# ~/.hermes/config.yaml linje 484-487
 mcp_servers:
   plotplanner:
     url: http://localhost:3000/mcp
     enabled: true
 
 # Telegram-gateway — Hermes håndterer Telegram nativt
+# ~/.hermes/config.yaml linje 375-378
 telegram:
   reactions: false
   allowed_chats: ''
