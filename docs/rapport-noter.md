@@ -56,7 +56,7 @@ Wikipedia-tekster chunkes i 500-tegns segmenter med 50 tegns overlap. Begrundels
 - **50 tegns overlap** sikrer at information ved chunk-grænser ikke går tabt. En sætning der krydser en grænse vil være repræsenteret i begge chunks.
 - Kortere chunks (f.eks. 200 tegn) ville give for lidt kontekst per embedding. Længere chunks (f.eks. 1000 tegn) ville gøre embeddings for generelle og reducere præcisionen ved cosine similarity-søgning.
 
-Resultat: 228 chunks, 104/104 planter dækket.
+Resultat: 228 chunks, 153/153 planter dækket.
 
 ### Embeddings: nomic-embed-text
 

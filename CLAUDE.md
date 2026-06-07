@@ -55,13 +55,13 @@ Projektet bygger videre på et 2-ugers projekt fra AI Agenter og Automatisering,
 ### Data-pipeline (fra 2-ugers projekt — uændrede)
 
 **Workflow A del 1** — Staging JSON Generator
-Henter data fra to companion planting datasæt, beriger med Wikidata, Wikipedia og Ollama (Mistral), og outputter `staging_plants.json` med 104 planter.
+Henter data fra to companion planting datasæt, beriger med Wikidata, Wikipedia og Ollama (Mistral), og outputter `staging_plants.json` med 153 planter.
 
 **Workflow A del 2** — Neo4j Writer
 Læser staging JSON og skriver planter og relationer til Neo4j med MERGE (idempotent).
 
 **Workflow B** — Vector Ingestion
-Henter Wikipedia-tekst per plante, chunker (500 tegn, 50 tegns overlap) og genererer embeddings med nomic-embed-text. 228 chunks, 104/104 planter dækket.
+Henter Wikipedia-tekst per plante, chunker (500 tegn, 50 tegns overlap) og genererer embeddings med nomic-embed-text. 228 chunks, 153/153 planter dækket.
 
 ### Eksamensprojekt-workflows (nye)
 
