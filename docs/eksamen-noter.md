@@ -51,6 +51,23 @@ AGENTS.md-instruktioner kan overrides af Geminis base model training ved multi-t
 
 ---
 
+## Refleksion: Skills vs Tools — og hvorfor markplan-skillen ikke bruges
+
+**Tools** (i MCP-serverens `tools/`-mappe) er funktioner der eksponeres til LLM'en via MCP-protokollen. De har et navn, en beskrivelse og et input-schema. LLM'en vælger og kalder dem selv baseret på brugerens besked og tool-beskrivelserne.
+
+**Skills** (i Hermes' `skills/`-mappe) er markdown-filer der beskriver en ræsonnerings-sekvens til Hermes. De er ikke tools — de er instrukser til agenten om *hvordan* den skal gennemføre et bestemt flow.
+
+**Funtet under gennemgang af konfigurationen:**
+`~/.hermes/config.yaml` har `skills: external_dirs: []` — ingen eksterne skill-mapper er konfigureret. Det betyder `hermes/skills/markplan.md` indlæses aldrig af Hermes. Skillen er passiv.
+
+**Hvorfor virker markplan-flowet alligevel?**
+Flowet drives udelukkende af `NEXT STEPS`-direktiverne i `season_soil_filter.js`'s tool-resultat, der eksplicit beder agenten kalde `graph_query` × 3. Det er i overensstemmelse med rapporten, der konkluderer at NEXT STEP-instruktioner i tool-resultater er mere pålidelige end skillens tekst — blot af en anden årsag: skillen kørte aldrig.
+
+**Til eksamen:**
+Hvis der spørges til custom skills, kan du svare ærligt: "Jeg opdagede under forberedelsen at skillen ikke var korrekt konfigureret til at blive indlæst. Flowet fungerer fordi NEXT STEP-mønsteret i tool-resultaterne er mere autoritativt end en skill-fil — et arkitektonisk fund der styrker konklusionen om tool-result-driven sequencing."
+
+---
+
 ## Kendte quirks under demo
 
 - Agenten viser intern "tænkning" mellem tool-kald ("Now, Peas:...") — det er Gemini-adfærd der ikke kan slås fra, men illustrerer agentic reasoning
