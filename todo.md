@@ -28,4 +28,4 @@
 3. Slet `markplan.md` da NEXT STEP-mønsteret er mere pålideligt og allerede virker
 
 ## mcp-server/lib/neo4j.js
-- [ ] Tilføj opstartcheck på Neo4j-forbindelsen — driveren er lazy og fejler først når et tool kaldes, ikke ved serverstart
+- [x] Tilføj opstartcheck på Neo4j-forbindelsen — verificeret: server stopper med fejlbesked hvis Neo4j ikke kører
