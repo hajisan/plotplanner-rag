@@ -23,6 +23,11 @@ mcp_servers:
     url: http://localhost:3000/mcp  # adressen på den lokale MCP-server
     enabled: true                   # MCP-serveren er aktiv
 
+# Display-indstillinger
+# ~/.hermes/config.yaml linje 229-231
+display:
+  personality: helpful  # aktiv personality — Hermes svarer som en hjælpsom, venlig assistent
+
 # Telegram-gateway — Hermes håndterer Telegram nativt
 # ~/.hermes/config.yaml linje 375-378
 telegram:
