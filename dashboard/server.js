@@ -73,13 +73,14 @@ function checkHermes() {
 }
 
 async function doHealthChecks() {
-  const [gateway, mcp, n8n, neo4j] = await Promise.all([
+  const [gateway, mcp, n8n, neo4j, ollama] = await Promise.all([
     checkHermes(),
     checkTCP(3000).then(ok => ok ? 'online' : 'offline'),
     checkTCP(5678).then(ok => ok ? 'online' : 'offline'),
     checkTCP(7474).then(ok => ok ? 'online' : 'offline'),
+    checkTCP(11434).then(ok => ok ? 'online' : 'offline'),
   ]);
-  broadcast('health', { gateway, mcp, n8n, neo4j });
+  broadcast('health', { gateway, mcp, n8n, neo4j, ollama });
 }
 
 async function doNeo4jStats() {

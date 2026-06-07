@@ -169,6 +169,11 @@
       align-items: center;
     }
 
+    .v-branches {
+      display: flex;
+      gap: 10px;
+    }
+
     .v-branch {
       display: flex;
       flex-direction: column;
@@ -320,7 +325,7 @@
     <div class="svc">
       <div class="svc-box checking" id="svc-gateway">
         <span class="icon">&#x1F50C;</span>
-        <span class="name">Gateway</span>
+        <span class="name">Hermes</span>
       </div>
       <div class="status-dot" id="dot-gateway"></div>
     </div>
@@ -329,8 +334,8 @@
 
     <div class="svc">
       <div class="svc-box checking" id="svc-agent">
-        <span class="icon">&#x1F916;</span>
-        <span class="name">Agent</span>
+        <span class="icon">&#x26A1;</span>
+        <span class="name">Gemini 2.5</span>
       </div>
       <div class="status-dot" id="dot-agent"></div>
     </div>
@@ -345,14 +350,26 @@
         </div>
         <div class="status-dot" id="dot-mcp"></div>
       </div>
-      <div class="v-branch">
-        <div class="v-arrow" id="arr-v"></div>
-        <div class="svc">
-          <div class="svc-box checking" id="svc-n8n">
-            <span class="icon">&#x2699;&#xFE0F;</span>
-            <span class="name">n8n Wf.E</span>
+      <div class="v-branches">
+        <div class="v-branch">
+          <div class="v-arrow" id="arr-v"></div>
+          <div class="svc">
+            <div class="svc-box checking" id="svc-n8n">
+              <span class="icon">&#x2699;&#xFE0F;</span>
+              <span class="name">n8n Wf.E</span>
+            </div>
+            <div class="status-dot" id="dot-n8n"></div>
           </div>
-          <div class="status-dot" id="dot-n8n"></div>
+        </div>
+        <div class="v-branch">
+          <div class="v-arrow" id="arr-v2"></div>
+          <div class="svc">
+            <div class="svc-box checking" id="svc-ollama">
+              <span class="icon">&#x1F999;</span>
+              <span class="name">Ollama</span>
+            </div>
+            <div class="status-dot" id="dot-ollama"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -522,6 +539,7 @@
       setSvc('mcp',     h.mcp     || 'offline');
       setSvc('n8n',     h.n8n     || 'offline');
       setSvc('neo4j',   h.neo4j   || 'offline');
+      setSvc('ollama',  h.ollama  || 'offline');
     });
 
     es.addEventListener('log', function(e) {
