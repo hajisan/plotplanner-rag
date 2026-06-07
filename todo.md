@@ -1,16 +1,16 @@
 # Todo — oprydning før eksamen
 
 ## mcp-server/index.js
-- [ ] Slet `/sse` endpoint og tilhørende `sseTransports` Map — Hermes bruger `/mcp` (Streamable HTTP), ikke SSE
+- [x] Slet `/sse` endpoint og tilhørende `sseTransports` Map — verificeret med MCP Inspector
 
 ## mcp-server/stdio.js
-- [ ] Slet filen — bruges ikke af Hermes, kun relevant for klienter som Claude Desktop
+- [x] Slet filen — slettet
 
 ## mcp-server/package.json
-- [ ] Tilføj `cors` som eksplicit dependency — pakken bruges i index.js men mangler i package.json
+- [x] Tilføj `cors` som eksplicit dependency — tilføjet og package-lock.json opdateret
 
 ## hermes/config.yaml
-- [ ] Fjern `database:` sektionen — Hermes taler ikke direkte med Neo4j, al databaseadgang går via MCP-serveren. Sektionen er misvisende dokumentation.
+- [x] Fjern `database:` sektionen — fjernet da hele filen blev omskrevet
 
 ## hermes/skills/markplan.md vs mcp-server/tools/season_soil_filter.js
 - [ ] Afklar om markplan-skillen skal aktiveres eller om NEXT STEP i season_soil_filter.js er tilstrækkelig
