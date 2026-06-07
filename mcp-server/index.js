@@ -78,4 +78,11 @@ app.all("/mcp", async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`PlotPlanner MCP server kører på port ${PORT}`);
+}).on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(`Port ${PORT} er allerede i brug — er serveren allerede startet?`);
+  } else {
+    console.error("Serverfejl:", err.message);
+  }
+  process.exit(1);
 });
