@@ -70,7 +70,7 @@ Hermes Agent  ←── AGENTS.md (system prompt + markplan-sekvens)
 │   ├── arkitektur.md                             # Systemarkitektur med Mermaid-diagrammer
 │   ├── eksamen-noter.md                          # Demo-spørgsmål og refleksioner
 │   ├── rapport-noter.md                          # Løbende noter til rapport-skrivning
-│   └── rapport.docx
+
 ├── start.sh                                      # Starter alle services (alias: plotplannerstart)
 └── screenshots/
 ```
@@ -89,7 +89,7 @@ Markplanlægning til småskala- og regenerativt landbrug. Systemet kombinerer to
 
 ---
 
-## Datasæt — 104 planter
+## Datasæt — 153 planter
 
 | Kilde | Brug | Licens |
 |---|---|---|
@@ -114,13 +114,13 @@ Markplanlægning til småskala- og regenerativt landbrug. Systemet kombinerer to
 ## Workflows
 
 **Workflow A del 1** — Staging JSON Generator  
-Henter data fra to datasæt, beriger med Wikidata, Wikipedia og Ollama (Mistral). Output: `staging_plants.json` med 104 planter.
+Henter data fra to datasæt, beriger med Wikidata, Wikipedia og Ollama (Mistral). Output: `staging_plants.json` med 153 planter.
 
 **Workflow A del 2** — Neo4j Writer  
 Læser staging JSON og skriver planter og relationer til Neo4j med MERGE (idempotent).
 
 **Workflow B** — Vector Ingestion  
-Henter Wikipedia-tekst, chunker (500 tegn, 50 overlap) og genererer embeddings. 228 chunks, 104/104 planter dækket.
+Henter Wikipedia-tekst, chunker (500 tegn, 50 overlap) og genererer embeddings. 228 chunks, 104/153 planter dækket.
 
 **Workflow E** — Season/Soil Filter (webhook)  
 Eksponeret som MCP tool. Modtager dansk eller engelsk sæson + jordbundstype, mapper til Neo4j-værdier og returnerer egnede planter.
