@@ -2,7 +2,7 @@
 
 > Et RAG-system der kombinerer vector- og graph-database i Neo4j til markplanlægning for regenerativt landbrug og andelsgårde. Systemet svarer på spørgsmål om companion planting og sædskifte via en AI agent tilgængelig over Telegram.
 
-**Kursus**: AI Agenter og Automatisering — KEA 4. semester  
+**Kursus**: AI Agenter og Automatisering — EK 4. semester  
 **Underviser**: Lasse Vogelsang  
 
 ---
